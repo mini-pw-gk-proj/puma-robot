@@ -8,6 +8,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always -Wall -g")
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
+elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmodules-ts")
 endif()
 
 # Shader failes
@@ -60,8 +62,23 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")        # Windows
     find_package(OpenGL REQUIRED)
     include_directories( ${OPENGL_INCLUDE_DIRS})
     target_link_libraries(PumaRobot
-            ${CMAKE_SOURCE_DIR}/dep/lib/glfw3.lib       # WiP
-            ${CMAKE_SOURCE_DIR}/dep/lib/glew32.lib      # WiP
+            ${CMAKE_SOURCE_DIR}/dep/lib/glfw3.lib
+            ${CMAKE_SOURCE_DIR}/dep/lib/glew32.lib
             ${OPENGL_LIBRARIES}
+    )
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")          # Linux
+    target_link_libraries(PumaRobot
+            -lglfw
+            -lGLEW
+            -lGLU
+            -lGL
+            -lX11
+            -lpthread
+            -lXrandr
+            -lXi
+            -ldl
+            -lassimp
+            -luuid
+            nfd
     )
 endif()

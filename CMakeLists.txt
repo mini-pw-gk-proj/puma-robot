@@ -70,15 +70,11 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")          # Linux
     target_link_libraries(PumaRobot
             -lglfw
             -lGLEW
-            -lGLU
             -lGL
             -lX11
             -lpthread
             -lXrandr
             -lXi
             -ldl
-            -lassimp
-            -luuid
-            nfd
     )
 endif()

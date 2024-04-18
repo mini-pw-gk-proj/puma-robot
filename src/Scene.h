@@ -10,7 +10,7 @@
 
 class Scene {
 
-//    Robot robot;
+    Robot robot;
 
 public:
     void update();

@@ -37,6 +37,10 @@ set(APP_SRC
         src/Shader.cpp
         src/Shader.h
         src/VariantUtil.h
+        src/mesh/Mesh.h
+        src/mesh/is_vertex.h
+        src/mesh/PositionVertex.h
+        src/glew_glfw.h
 )
 
 # Include directories

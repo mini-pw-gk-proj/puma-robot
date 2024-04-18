@@ -112,7 +112,7 @@ int main(int, char**)
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-//    Scene scene;
+    Scene scene;
 
     // Main loop
 #ifdef __EMSCRIPTEN__
@@ -182,8 +182,8 @@ int main(int, char**)
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-//        scene.update();
-//        scene.render();
+        scene.update();
+        scene.render();
 
         glfwSwapBuffers(window);
     }

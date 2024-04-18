@@ -5,12 +5,7 @@
 #ifndef PUMAROBOT_SHADER_H
 #define PUMAROBOT_SHADER_H
 
-// GLEW
-#include <GL/glew.h>
-
-// GLFW
-#include <GLFW/glfw3.h>
-
+#include "glew_glfw.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 

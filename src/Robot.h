@@ -7,8 +7,13 @@
 
 
 #include "Shader.h"
+#include "mesh/Mesh.h"
+#include "mesh/PositionVertex.h"
 
 class Robot {
+
+    Mesh<PositionVertex> mesh;
+
 public:
     void update(float timeMs);
     void render(Shader shader);

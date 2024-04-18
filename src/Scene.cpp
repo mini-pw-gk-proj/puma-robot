@@ -22,10 +22,10 @@ void Scene::render() {
     phongShader.setUniform("model", glm::mat4(1.f));
     phongShader.setUniform("viewPos", camera.getViewPosition());
     phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
-    phongShader.setUniform("material.shininess", 9999);
-    phongShader.setUniform("pointLight.position", glm::vec3(0,0,2));
+    phongShader.setUniform("material.shininess", 16);
+    phongShader.setUniform("pointLight.position", glm::vec3(0,2,1));
     phongShader.setUniform("pointLight.color", glm::vec3(1));
-    phongShader.setUniform("pointLight.strength", 2.f);
+    phongShader.setUniform("pointLight.strength", 4.f);
     phongShader.setUniform("pointLight.constantAttenuation", 1.0f);
     phongShader.setUniform("pointLight.linearAttenuation", 0.7f);
     phongShader.setUniform("pointLight.quadraticAttenuation", 1.8f);

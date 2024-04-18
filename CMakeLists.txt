@@ -29,6 +29,16 @@ set(IMGUI_SRC
         ${IMGUI_DIR}/misc/cpp/imgui_stdlib.cpp
 )
 
+set(APP_SRC
+        src/Scene.cpp
+        src/Scene.h
+        src/Robot.cpp
+        src/Robot.h
+        src/Shader.cpp
+        src/Shader.h
+        src/VariantUtil.h
+)
+
 # Include directories
 include_directories(${CMAKE_SOURCE_DIR}/dep/inc)
 
@@ -45,6 +55,7 @@ add_executable(PumaRobot
         ${CMAKE_SOURCE_DIR}/src/glad.c
         # Application
         ${CMAKE_SOURCE_DIR}/src/main.cpp
+        ${APP_SRC}
 )
 
 # Link libraries

@@ -39,7 +39,7 @@ set(APP_SRC
         src/VariantUtil.h
         src/mesh/Mesh.h
         src/mesh/is_vertex.h
-        src/mesh/PositionVertex.h
+        src/mesh/PositionNormalVertex.h
         src/glew_glfw.h
         src/camera/Camera.cpp
         src/camera/Camera.h

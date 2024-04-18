@@ -8,17 +8,19 @@
 
 #include "Shader.h"
 #include "mesh/Mesh.h"
-#include "mesh/PositionVertex.h"
+#include "mesh/PositionNormalVertex.h"
 
 class Robot {
 
-    std::unique_ptr<Mesh<PositionVertex>> mesh;
+    std::vector<Mesh<PositionNormalVertex>> meshes;
 
 public:
     Robot();
 
     void update(float timeMs);
     void render(Shader &shader);
+
+    Mesh<PositionNormalVertex> loadMesh(const std::string& path);
 };
 
 

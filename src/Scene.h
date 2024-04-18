@@ -7,15 +7,21 @@
 
 
 #include "Robot.h"
+#include "camera/Camera.h"
 
 class Scene {
+
+    Shader plainShader;
 
     Robot robot;
 
 public:
+    Scene();
     void update();
     void render();
 
+    Camera camera;
+    bool guiFocus = true;
 };
 
 

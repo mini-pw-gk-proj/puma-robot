@@ -12,11 +12,13 @@
 
 class Robot {
 
-    Mesh<PositionVertex> mesh;
+    std::unique_ptr<Mesh<PositionVertex>> mesh;
 
 public:
+    Robot();
+
     void update(float timeMs);
-    void render(Shader shader);
+    void render(Shader &shader);
 };
 
 

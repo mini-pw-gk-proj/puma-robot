@@ -41,6 +41,10 @@ set(APP_SRC
         src/mesh/is_vertex.h
         src/mesh/PositionVertex.h
         src/glew_glfw.h
+        src/camera/Camera.cpp
+        src/camera/Camera.h
+        src/input/InputHandler.cpp
+        src/input/InputHandler.h
 )
 
 # Include directories

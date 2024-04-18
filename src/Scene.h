@@ -11,7 +11,8 @@
 
 class Scene {
 
-    Shader plainShader;
+    Shader whiteShader;
+    Shader phongShader;
 
     Robot robot;
 

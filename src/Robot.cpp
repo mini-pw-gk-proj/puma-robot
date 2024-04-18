@@ -47,7 +47,7 @@ Mesh<PositionNormalVertex> Robot::loadMesh(const std::string& path) {
     // Load unique vertices
     std::vector<glm::vec3> uniqueVertices;
     for(int i=0; i < uniqueVerticesCount; i++) {
-        glm::vec3 vertex(std::stof(tokens[caret]), std::stof(tokens[caret+1]), std::stof(tokens[caret+2]));
+        glm::vec3 vertex(std::stof(tokens[caret+0]), std::stof(tokens[caret+1]), std::stof(tokens[caret+2]));
         caret+=3;
         uniqueVertices.push_back(vertex);
     }
@@ -68,8 +68,11 @@ Mesh<PositionNormalVertex> Robot::loadMesh(const std::string& path) {
     // Load indices from triangles
     std::vector<unsigned int> indices;
     indices.reserve(triangleCount*3);
-    for(int i=0; i < triangleCount*3; i++) {
-        indices.push_back(std::stoi(tokens[caret++]));
+    for(int i=0; i < triangleCount; i++) {
+        indices.push_back(std::stoi(tokens[caret+0]));
+        indices.push_back(std::stoi(tokens[caret+1]));
+        indices.push_back(std::stoi(tokens[caret+2]));
+        caret+=3;
     }
 
     file.close();

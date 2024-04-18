@@ -139,14 +139,14 @@ public:
 
     // Make sure you pass the correct type to the function! For example value "42" will be treated as int even if the uniform is float. Use "42.f" instead.
     void setUniform(const std::string &name, ShaderType &&value) const {
-//        std::visit(overloaded{
-//                [&](bool &v) { glUniform1i(glGetUniformLocation(ID, name.c_str()), (int) v); },
-//                [&](int &v) { glUniform1i(glGetUniformLocation(ID, name.c_str()), v); },
-//                [&](float &v) { glUniform1f(glGetUniformLocation(ID, name.c_str()), v); },
-//                [&](glm::vec3 &v) { glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &v[0]); },
-//                [&](glm::vec4 &v) { glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &v[0]); },
-//                [&](glm::mat4 &v) { glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &v[0][0]); }
-//        }, value);
+        std::visit(overloaded{
+                [&](bool &v) { glUniform1i(glGetUniformLocation(ID, name.c_str()), (int) v); },
+                [&](int &v) { glUniform1i(glGetUniformLocation(ID, name.c_str()), v); },
+                [&](float &v) { glUniform1f(glGetUniformLocation(ID, name.c_str()), v); },
+                [&](glm::vec3 &v) { glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &v[0]); },
+                [&](glm::vec4 &v) { glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &v[0]); },
+                [&](glm::mat4 &v) { glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &v[0][0]); }
+        }, value);
     };
 
 private:

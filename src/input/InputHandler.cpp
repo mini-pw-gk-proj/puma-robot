@@ -35,20 +35,20 @@ void InputHandler::keyCallback(GLFWwindow *window, int key, int scancode, int ac
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
     if (key == GLFW_KEY_W && action == GLFW_PRESS)
-        scene.camera.processKeyboard(FORWARD, deltaTime);
+        appContext.camera.processKeyboard(FORWARD, deltaTime);
     if (key == GLFW_KEY_S && action == GLFW_PRESS)
-        scene.camera.processKeyboard(BACKWARD, deltaTime);
+        appContext.camera.processKeyboard(BACKWARD, deltaTime);
     if (key == GLFW_KEY_A && action == GLFW_PRESS)
-        scene.camera.processKeyboard(LEFT, deltaTime);
+        appContext.camera.processKeyboard(LEFT, deltaTime);
     if (key == GLFW_KEY_D && action == GLFW_PRESS)
-        scene.camera.processKeyboard(RIGHT, deltaTime);
+        appContext.camera.processKeyboard(RIGHT, deltaTime);
 }
 
 void InputHandler::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-        scene.guiFocus = false;
+        appContext.guiFocus = false;
     else {
-        scene.guiFocus = true;
+        appContext.guiFocus = true;
     }
 }
 
@@ -74,8 +74,8 @@ void InputHandler::mouseCallback(GLFWwindow *window, double xposIn, double yposI
     lastX = xpos;
     lastY = ypos;
 
-    if (!scene.guiFocus) {
-        scene.camera.processMouseMovement(xoffset, yoffset);
+    if (!appContext.guiFocus) {
+        appContext.camera.processMouseMovement(xoffset, yoffset);
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     } else glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
@@ -84,5 +84,5 @@ void InputHandler::mouseCallback(GLFWwindow *window, double xposIn, double yposI
 // ----------------------------------------------------------------------
 void InputHandler::scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
     if (ImGui::GetIO().WantCaptureMouse) return;
-    scene.camera.processMouseScroll(static_cast<float>(yoffset));
+    appContext.camera.processMouseScroll(static_cast<float>(yoffset));
 }

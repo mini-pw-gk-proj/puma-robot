@@ -8,21 +8,19 @@
 
 #include "Robot.h"
 #include "camera/Camera.h"
+#include "app/AppContext.h"
 
 class Scene {
 
     Shader whiteShader;
     Shader phongShader;
 
-    Robot robot;
+    AppContext &appContext;
 
 public:
-    Scene();
+    explicit Scene(AppContext &appContext);
     void update();
     void render();
-
-    Camera camera;
-    bool guiFocus = true;
 };
 
 

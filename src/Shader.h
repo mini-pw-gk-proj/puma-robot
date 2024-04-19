@@ -24,7 +24,7 @@ using ShaderType = std::variant<bool, int, float, glm::vec3, glm::vec4, glm::mat
 
 class Shader {
 public:
-    unsigned int ID;
+    unsigned int ID{};
 
     std::string vertexPath;
     std::string tesselationControlPath;
@@ -32,25 +32,25 @@ public:
     std::string geometryPath;
     std::string fragmentPath;
 
-    int maxUniformNameLength;
-    int uniformCount;
+    int maxUniformNameLength{};
+    int uniformCount{};
     std::unique_ptr<char[]> uniformNameBuffer;
     bool active = true;
 
     Shader(std::string vertexShaderPath, std::string fragmentShaderPath) :
-            vertexPath(std::move(vertexShaderPath)), geometryPath(), fragmentPath(std::move(fragmentShaderPath)), tesselationControlPath(),
-            tesselationEvaluationPath() {
+            vertexPath(std::move(vertexShaderPath)), tesselationControlPath(), tesselationEvaluationPath(), geometryPath(),
+            fragmentPath(std::move(fragmentShaderPath)) {
         initShader();
     }
     Shader(std::string vertexShaderPath, std::string geometryShaderPath, std::string fragmentShaderPath) :
-            vertexPath(std::move(vertexShaderPath)), geometryPath(std::move(geometryShaderPath)),
-            fragmentPath(std::move(fragmentShaderPath)), tesselationControlPath(), tesselationEvaluationPath()  {
+            vertexPath(std::move(vertexShaderPath)), tesselationControlPath(),
+            tesselationEvaluationPath(), geometryPath(std::move(geometryShaderPath)), fragmentPath(std::move(fragmentShaderPath))  {
         initShader();
     }
     Shader(std::string vertexShaderPath, std::string tesselationControlPath, std::string tesselationEvaluationPath, std::string fragmentShaderPath) :
-            vertexPath(std::move(vertexShaderPath)), geometryPath(),
-            fragmentPath(std::move(fragmentShaderPath)), tesselationControlPath(std::move(tesselationControlPath)),
-            tesselationEvaluationPath(std::move(tesselationEvaluationPath))  {
+            vertexPath(std::move(vertexShaderPath)), tesselationControlPath(std::move(tesselationControlPath)),
+            tesselationEvaluationPath(std::move(tesselationEvaluationPath)), geometryPath(),
+            fragmentPath(std::move(fragmentShaderPath))  {
         initShader();
     }
 
@@ -147,7 +147,7 @@ public:
 private:
     // utility function for checking shader compilation/linking errors.
     // ------------------------------------------------------------------------
-    void checkCompileErrors(unsigned int shader, std::string type) {
+    static void checkCompileErrors(unsigned int shader, std::string type) {
         int success;
         char infoLog[1024];
         if (type != "PROGRAM") {

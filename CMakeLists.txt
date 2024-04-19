@@ -45,6 +45,9 @@ set(APP_SRC
         src/camera/Camera.h
         src/input/InputHandler.cpp
         src/input/InputHandler.h
+        src/gui/Gui.cpp
+        src/gui/Gui.h
+        src/app/AppContext.h
 )
 
 # Include directories

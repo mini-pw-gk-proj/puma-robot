@@ -9,9 +9,9 @@
 #include "../Scene.h"
 
 class InputHandler {
-    Scene &scene;
+    AppContext &appContext;
 public:
-    explicit InputHandler(Scene &scene) : scene(scene) {};
+    explicit InputHandler(AppContext &appContext) : appContext(appContext) {};
 
     void setupCallbacks(GLFWwindow *window);
 

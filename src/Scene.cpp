@@ -12,14 +12,15 @@ Scene::Scene(AppContext &appContext) :
     {}
 
 void Scene::update() {
+    auto timeS = float(glfwGetTime());
 
+    appContext.robot.update(timeS);
 }
 
 void Scene::render() {
     phongShader.use();
     phongShader.setUniform("view", appContext.camera.getViewMatrix());
     phongShader.setUniform("projection", appContext.camera.getProjectionMatrix());
-    phongShader.setUniform("model", glm::mat4(1.f));
     phongShader.setUniform("viewPos", appContext.camera.getViewPosition());
     phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
     phongShader.setUniform("material.shininess", 16);

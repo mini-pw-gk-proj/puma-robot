@@ -12,15 +12,39 @@
 
 class Robot {
 
-    std::vector<Mesh<PositionNormalVertex>> meshes;
+    Mesh<PositionNormalVertex> standMesh;
+    std::vector<Mesh<PositionNormalVertex>> armMeshes;
+
+    std::vector<glm::vec3> armRotationAxisOffsets;
+    std::vector<glm::vec3> armRotationAxes;
+    glm::vec3 startingNeedlePosition;
+    glm::vec3 startingNeedleOrientation;
+
+public:
+    enum MovementState {
+        FreeAngles = 0,
+        FreeInverseKinematics = 1,
+        AnimatedInverseKinematics = 2,
+    };
+
+    std::vector<float> armRotationAngles;
+    glm::vec3 needlePosition;
+    glm::vec3 needleOrientation;
+    MovementState movementState;
 
 public:
     Robot();
 
-    void update(float timeMs);
+    void update(float timeS);
     void render(Shader &shader);
 
     Mesh<PositionNormalVertex> loadMesh(const std::string& path);
+
+    static void inverseKinematics(glm::vec3 pos, glm::vec3 normal, float &a1, float &a2, float &a3, float &a4, float &a5);
+
+    void updateNeedle();
+
+    void updateAnimation(float d);
 };
 
 

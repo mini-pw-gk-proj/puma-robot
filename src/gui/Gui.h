@@ -6,17 +6,20 @@
 #define PUMAROBOT_GUI_H
 
 
-#include "GLFW/glfw3.h"
+#include "../app/AppContext.h"
 
 class Gui {
+    AppContext &appContext;
 public:
-    explicit Gui(GLFWwindow *window);
+    explicit Gui(AppContext &appContext, GLFWwindow *window);
 
     void render();
 
-    void newFrame();
+    static void newFrame();
 
     ~Gui();
+
+    void showSceneWindow();
 };
 
 

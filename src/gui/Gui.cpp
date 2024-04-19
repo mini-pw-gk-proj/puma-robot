@@ -5,8 +5,9 @@
 #include "Gui.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
+#include <glm/gtc/type_ptr.hpp>
 
-Gui::Gui(GLFWwindow *window) {
+Gui::Gui(AppContext &appContext, GLFWwindow *window) : appContext(appContext) {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -54,9 +55,7 @@ void Gui::newFrame() {
 }
 
 void Gui::render() {
-    ImGui::ShowDemoWindow();
-
-
+    showSceneWindow();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -66,4 +65,32 @@ Gui::~Gui() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+}
+
+void Gui::showSceneWindow() {
+    ImGui::Begin("Scene Window");
+    bool fieldModified = false;
+    // User input for free angles.
+    ImGui::SeparatorText("Arm angles");
+    for(int i = 0; i < appContext.robot.armRotationAngles.size(); i++) {
+        auto &angle = appContext.robot.armRotationAngles[i];
+        fieldModified |= ImGui::SliderAngle(std::string(std::to_string(i) + ". arm").c_str(), &angle, 0.01f);
+    }
+    if(fieldModified) appContext.robot.movementState = Robot::FreeAngles; // Change focus to free angles.
+    fieldModified = false;
+
+    // User input for needle position for inverse kinematics.
+    fieldModified |= ImGui::DragFloat3("Needle position", glm::value_ptr(appContext.robot.needlePosition), 0.002f);
+    fieldModified |= ImGui::DragFloat3("Needle orientation", glm::value_ptr(appContext.robot.needleOrientation), 0.002f);
+    if(fieldModified) {
+        appContext.robot.needleOrientation = glm::normalize(appContext.robot.needleOrientation);
+        appContext.robot.movementState = Robot::FreeInverseKinematics;
+    }
+    fieldModified = false;
+
+    bool animated = appContext.robot.movementState == Robot::AnimatedInverseKinematics;
+    fieldModified |= ImGui::Checkbox("Animation", &animated);
+    if(fieldModified) appContext.robot.movementState = animated? Robot::AnimatedInverseKinematics: Robot::FreeAngles;
+
+    ImGui::End();
 }

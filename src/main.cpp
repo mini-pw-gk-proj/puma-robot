@@ -96,7 +96,7 @@ int main(int, char**)
     Scene scene(appContext);
     InputHandler inputHandler(appContext);
     inputHandler.setupCallbacks(window);
-    Gui gui(window);
+    Gui gui(appContext, window);
 
     // Our state
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);

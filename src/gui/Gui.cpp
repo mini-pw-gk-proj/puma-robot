@@ -68,6 +68,9 @@ Gui::~Gui() {
 }
 
 void Gui::showSceneWindow() {
+
+    showScene();
+
     ImGui::Begin("Scene Window");
     bool fieldModified = false;
     // User input for free angles.
@@ -91,6 +94,34 @@ void Gui::showSceneWindow() {
     bool animated = appContext.robot.movementState == Robot::AnimatedInverseKinematics;
     fieldModified |= ImGui::Checkbox("Animation", &animated);
     if(fieldModified) appContext.robot.movementState = animated? Robot::AnimatedInverseKinematics: Robot::FreeAngles;
+
+    ImGui::End();
+}
+
+void Gui::showScene () const
+{
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    static bool use_work_area = true;
+    ImGui::SetNextWindowPos(use_work_area ? viewport->WorkPos : viewport->Pos);
+    ImGui::SetNextWindowSize(use_work_area ? viewport->WorkSize : viewport->Size);
+
+    static ImGuiWindowFlags flags =
+            ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings
+            | ImGuiWindowFlags_NoBringToFrontOnFocus;
+
+    if (!ImGui::Begin("Scene", nullptr, flags))
+    {
+        // Error
+        ImGui::End();
+        return;
+    }
+
+    ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+    // add rendered texture to ImGUI scene window
+    uint64_t textureID = appContext.frameBufferManager->get_texture();
+    ImVec2 canvas_sz = ImVec2{ viewportPanelSize.x, viewportPanelSize.y };
+    ImGui::Image(reinterpret_cast<void*>(textureID), canvas_sz, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
     ImGui::End();
 }

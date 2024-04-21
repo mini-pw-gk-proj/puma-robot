@@ -48,6 +48,8 @@ set(APP_SRC
         src/gui/Gui.cpp
         src/gui/Gui.h
         src/app/AppContext.h
+        src/framebufferManager/FrameBufferManager.cpp
+        src/framebufferManager/FrameBufferManager.h
 )
 
 # Include directories

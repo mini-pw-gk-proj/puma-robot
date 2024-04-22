@@ -80,6 +80,8 @@ public:
     void processMouseMovement(float xoffset, float yoffset);
     void processMouseScroll(float yoffset);
 
+    void resize(int screenWidth, int screenHeight);
+
     int screenWidth;
     int screenHeight;
 

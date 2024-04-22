@@ -146,3 +146,9 @@ void Camera::processKeyboardAnchor(CameraMovement direction, float deltaTime) {
     //TODO move orientation
     updateDirections();
 }
+
+void Camera::resize (int screenWidth, int screenHeight)
+{
+    this->screenWidth = screenWidth;
+    this->screenHeight = screenHeight;
+}

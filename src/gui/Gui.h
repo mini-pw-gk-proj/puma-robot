@@ -10,6 +10,9 @@
 
 class Gui {
     AppContext &appContext;
+
+    void showScene() const;
+
 public:
     explicit Gui(AppContext &appContext, GLFWwindow *window);
 

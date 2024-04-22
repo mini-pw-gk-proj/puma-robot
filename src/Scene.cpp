@@ -18,6 +18,8 @@ void Scene::update() {
 }
 
 void Scene::render() {
+    appContext.frameBufferManager->bind();
+
     phongShader.use();
     phongShader.setUniform("view", appContext.camera.getViewMatrix());
     phongShader.setUniform("projection", appContext.camera.getProjectionMatrix());
@@ -32,4 +34,7 @@ void Scene::render() {
     phongShader.setUniform("pointLight.quadraticAttenuation", 1.8f);
 
     appContext.robot.render(phongShader);
+
+    appContext.frameBufferManager->unbind();
 }
+

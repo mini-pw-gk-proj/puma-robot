@@ -20,6 +20,7 @@ private:
     void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
     void mouseCallback(GLFWwindow *window, double xposIn, double yposIn);
     void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
+    void windowResize(GLFWwindow* window, int width, int height);
 };
 
 

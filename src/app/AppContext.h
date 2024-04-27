@@ -6,7 +6,7 @@
 #define PUMAROBOT_APPCONTEXT_H
 
 
-#include "../Robot.h"
+#include "../robot/Robot.h"
 #include "../camera/Camera.h"
 #include "../framebufferManager/FrameBufferManager.h"
 #include "../importer/Importer.h"

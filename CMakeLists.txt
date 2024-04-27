@@ -32,8 +32,8 @@ set(IMGUI_SRC
 set(APP_SRC
         src/Scene.cpp
         src/Scene.h
-        src/Robot.cpp
-        src/Robot.h
+        src/robot/Robot.cpp
+        src/robot/Robot.h
         src/Shader.cpp
         src/Shader.h
         src/VariantUtil.h
@@ -54,6 +54,8 @@ set(APP_SRC
         src/importer/Importer.h
         src/importer/RawModel.h
         src/importer/Model.h
+        src/robot/RobotKinematics.cpp
+        src/robot/RobotKinematics.h
 )
 
 # Include directories

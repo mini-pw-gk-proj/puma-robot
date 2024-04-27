@@ -35,6 +35,7 @@ void Scene::render() {
 
     appContext.robot->render(phongShader);
     appContext.room->render(phongShader);
+    appContext.cylinder->render(phongShader);
 
     appContext.frameBufferManager->unbind();
 }

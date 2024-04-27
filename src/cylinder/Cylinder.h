@@ -2,27 +2,28 @@
 // Created by Bartek Jadczak on 27/04/2024.
 //
 
-#ifndef PUMAROBOT_ROOM_H
-#define PUMAROBOT_ROOM_H
+#ifndef PUMAROBOT_CYLINDER_H
+#define PUMAROBOT_CYLINDER_H
 
 #include "../Shader.h"
 #include "../mesh/Mesh.h"
 #include "../mesh/PositionNormalVertex.h"
 #include "../importer/Model.h"
 
-class Room
+class Cylinder
 {
     std::unique_ptr<Mesh<PositionNormalVertex>> mesh;
 
-    static Model generateRoom(float width, float height, float depth);
+    static Model generateCylinder(float radius, float height, int slices);
+
+    float x, y, z;
 
 public:
 
-    Room();
+    Cylinder();
 
     void render(Shader &shader);
-
 };
 
 
-#endif //PUMAROBOT_ROOM_H
+#endif //PUMAROBOT_CYLINDER_H

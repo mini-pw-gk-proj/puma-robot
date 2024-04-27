@@ -50,6 +50,10 @@ set(APP_SRC
         src/app/AppContext.h
         src/framebufferManager/FrameBufferManager.cpp
         src/framebufferManager/FrameBufferManager.h
+        src/importer/Importer.cpp
+        src/importer/Importer.h
+        src/importer/RawModel.h
+        src/importer/Model.h
 )
 
 # Include directories

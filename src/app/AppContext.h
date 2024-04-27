@@ -9,9 +9,10 @@
 #include "../Robot.h"
 #include "../camera/Camera.h"
 #include "../framebufferManager/FrameBufferManager.h"
+#include "../importer/Importer.h"
 
 struct AppContext {
-    Robot robot;
+    std::unique_ptr<Robot> robot;
 
     Camera camera;
 
@@ -31,6 +32,13 @@ struct AppContext {
         {
             frameBufferManager = std::make_unique<FrameBufferManager>();
             frameBufferManager->create_buffers(camera.screenWidth, camera.screenHeight);
+
+            auto standModel = Importer::loadModel("../res/models/mesh1.txt");
+            std::vector<Model> armModels;
+            armModels.reserve(5);
+            for(int i = 0; i < 5; i++)
+                armModels.push_back(Importer::loadModel("../res/models/mesh" + std::to_string(i+2) + ".txt"));
+            robot = std::make_unique<Robot>(standModel, armModels);
         }
 };
 

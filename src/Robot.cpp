@@ -4,13 +4,12 @@
 
 #include "Robot.h"
 
-Robot::Robot() {
-    standMesh = loadMesh("../res/models/mesh1.txt");
-    armMeshes.emplace_back(loadMesh("../res/models/mesh2.txt"));
-    armMeshes.emplace_back(loadMesh("../res/models/mesh3.txt"));
-    armMeshes.emplace_back(loadMesh("../res/models/mesh4.txt"));
-    armMeshes.emplace_back(loadMesh("../res/models/mesh5.txt"));
-    armMeshes.emplace_back(loadMesh("../res/models/mesh6.txt"));
+Robot::Robot(Model& standModel, std::vector<Model>& armModels) {
+    standMesh = std::make_unique<Mesh<PositionNormalVertex>>(standModel.vertices, standModel.triagleIndices);
+    armModels.reserve(armModels.size());
+    for(auto &armModel : armModels) {
+        armMeshes.emplace_back(armModel.vertices, armModel.triagleIndices);
+    }
 
     armRotationAxes = {
             {0, 1, 0},  // Y-aligned
@@ -99,7 +98,7 @@ void Robot::updateAnimation(float timeS) {
 void Robot::render(Shader &shader) {
 
     shader.setUniform("model", glm::mat4(1.0f));
-    standMesh.render();
+    standMesh->render();
 
     glm::mat4 model(1.0f);
     for (int i = 0; i < armMeshes.size(); i++) {
@@ -112,61 +111,4 @@ void Robot::render(Shader &shader) {
         shader.setUniform("model", model);
         mesh.render();
     }
-}
-
-Mesh<PositionNormalVertex> Robot::loadMesh(const std::string& path) {
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        throw(std::runtime_error("Error opening file."));
-    }
-
-    std::vector<std::string> tokens;
-
-    std::string line;
-    while (std::getline(file, line)) {
-        std::istringstream iss(line);
-        std::string token;
-        while (iss >> token) {
-            tokens.push_back(token);
-        }
-    }
-
-    int caret = 0;
-
-    // Unique vertices section starts with their count.
-    int uniqueVerticesCount = std::stoi(tokens[caret++]);
-    // Load unique vertices
-    std::vector<glm::vec3> uniqueVertices;
-    for(int i=0; i < uniqueVerticesCount; i++) {
-        glm::vec3 vertex(std::stof(tokens[caret+0]), std::stof(tokens[caret+1]), std::stof(tokens[caret+2]));
-        caret+=3;
-        uniqueVertices.push_back(vertex);
-    }
-
-    // Vertices section starts with their count.
-    int verticesCount = std::stoi(tokens[caret++]);
-    // Load vertices
-    std::vector<PositionNormalVertex> vertices;
-    for(int i=0; i < verticesCount; i++) {
-        int id = std::stoi(tokens[caret++]);
-        glm::vec3 normal(std::stof(tokens[caret]), std::stof(tokens[caret+1]), std::stof(tokens[caret+2]));
-        caret+=3;
-        vertices.push_back({uniqueVertices[id], normal});
-    }
-
-    // Triangle section starts with their count.
-    int triangleCount = std::stoi(tokens[caret++]);
-    // Load indices from triangles
-    std::vector<unsigned int> indices;
-    indices.reserve(triangleCount*3);
-    for(int i=0; i < triangleCount; i++) {
-        indices.push_back(std::stoi(tokens[caret+0]));
-        indices.push_back(std::stoi(tokens[caret+1]));
-        indices.push_back(std::stoi(tokens[caret+2]));
-        caret+=3;
-    }
-
-    file.close();
-
-    return Mesh(vertices, indices);
 }

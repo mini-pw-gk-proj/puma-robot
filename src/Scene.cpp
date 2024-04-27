@@ -14,7 +14,7 @@ Scene::Scene(AppContext &appContext) :
 void Scene::update() {
     auto timeS = float(glfwGetTime());
 
-    appContext.robot.update(timeS);
+    appContext.robot->update(timeS);
 }
 
 void Scene::render() {
@@ -33,7 +33,7 @@ void Scene::render() {
     phongShader.setUniform("pointLight.linearAttenuation", 0.7f);
     phongShader.setUniform("pointLight.quadraticAttenuation", 1.8f);
 
-    appContext.robot.render(phongShader);
+    appContext.robot->render(phongShader);
 
     appContext.frameBufferManager->unbind();
 }

@@ -7,12 +7,16 @@
 
 
 #include "../robot/Robot.h"
+#include "../room/Room.h"
 #include "../camera/Camera.h"
 #include "../framebufferManager/FrameBufferManager.h"
 #include "../importer/Importer.h"
 
+
 struct AppContext {
     std::unique_ptr<Robot> robot;
+
+    std::unique_ptr<Room> room;
 
     Camera camera;
 
@@ -39,6 +43,7 @@ struct AppContext {
             for(int i = 0; i < 5; i++)
                 armModels.push_back(Importer::loadModel("../res/models/mesh" + std::to_string(i+2) + ".txt"));
             robot = std::make_unique<Robot>(standModel, armModels);
+            room = std::make_unique<Room>();
         }
 };
 

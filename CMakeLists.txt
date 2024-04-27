@@ -56,6 +56,8 @@ set(APP_SRC
         src/importer/Model.h
         src/robot/RobotKinematics.cpp
         src/robot/RobotKinematics.h
+        src/room/Room.cpp
+        src/room/Room.h
 )
 
 # Include directories

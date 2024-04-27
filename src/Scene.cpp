@@ -34,6 +34,7 @@ void Scene::render() {
     phongShader.setUniform("pointLight.quadraticAttenuation", 1.8f);
 
     appContext.robot->render(phongShader);
+    appContext.room->render(phongShader);
 
     appContext.frameBufferManager->unbind();
 }

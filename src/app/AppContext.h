@@ -8,6 +8,7 @@
 
 #include "../robot/Robot.h"
 #include "../room/Room.h"
+#include "../cylinder/Cylinder.h"
 #include "../camera/Camera.h"
 #include "../framebufferManager/FrameBufferManager.h"
 #include "../importer/Importer.h"
@@ -17,6 +18,8 @@ struct AppContext {
     std::unique_ptr<Robot> robot;
 
     std::unique_ptr<Room> room;
+
+    std::unique_ptr<Cylinder> cylinder;
 
     Camera camera;
 
@@ -44,6 +47,7 @@ struct AppContext {
                 armModels.push_back(Importer::loadModel("../res/models/mesh" + std::to_string(i+2) + ".txt"));
             robot = std::make_unique<Robot>(standModel, armModels);
             room = std::make_unique<Room>();
+            cylinder = std::make_unique<Cylinder>();
         }
 };
 

@@ -58,6 +58,8 @@ set(APP_SRC
         src/robot/RobotKinematics.h
         src/room/Room.cpp
         src/room/Room.h
+        src/cylinder/Cylinder.cpp
+        src/cylinder/Cylinder.h
 )
 
 # Include directories

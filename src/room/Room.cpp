@@ -7,13 +7,13 @@
 Room::Room ()
 {
     auto room = generateRoom(10, 10, 10);
-    standMesh = std::make_unique<Mesh<PositionNormalVertex>>(room.vertices, room.triagleIndices);
+    mesh = std::make_unique<Mesh<PositionNormalVertex>>(room.vertices, room.triagleIndices);
 }
 
 void Room::render (Shader &shader)
 {
     shader.setUniform("model", glm::mat4(1));
-    standMesh->render();
+    mesh->render();
 }
 
 Model Room::generateRoom (float width, float height, float depth)

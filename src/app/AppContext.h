@@ -12,6 +12,7 @@
 #include "../camera/Camera.h"
 #include "../framebufferManager/FrameBufferManager.h"
 #include "../importer/Importer.h"
+#include "../light/PointLight.h"
 
 
 struct AppContext {
@@ -21,6 +22,7 @@ struct AppContext {
 
     std::unique_ptr<Cylinder> cylinder;
 
+    PointLight pointLight;
     Camera camera;
 
     std::unique_ptr<FrameBufferManager> frameBufferManager;

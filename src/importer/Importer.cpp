@@ -23,17 +23,43 @@ Model Importer::loadModel(const std::string &path) {
     }
 
     model.triagleAdjacencyIndices.reserve(6 * rawModel.triangles.size());
-    for(auto &triangle : rawModel.triangles) {
+    for(int i = 0; i < rawModel.triangles.size(); i++) {
+        auto &triangle = rawModel.triangles[i];
         model.triagleAdjacencyIndices.push_back(triangle[0]);
         model.triagleAdjacencyIndices.push_back(triangle[1]);
         model.triagleAdjacencyIndices.push_back(triangle[2]);
-        // TODO TriangleAdjacency
-        model.triagleAdjacencyIndices.push_back(0);
-        model.triagleAdjacencyIndices.push_back(0);
-        model.triagleAdjacencyIndices.push_back(0);
+
+        std::vector<unsigned int> adjecentTriangles;
+        for(auto &edge : rawModel.edges) {
+            if(i == edge.triangleIds[0]) adjecentTriangles.push_back(edge.triangleIds[1]);
+            if(i == edge.triangleIds[1]) adjecentTriangles.push_back(edge.triangleIds[0]);
+        }
+        assert(adjecentTriangles.size() == 3);
+
+        model.triagleAdjacencyIndices.push_back(findAdj(triangle[0], triangle[1], adjecentTriangles, rawModel));
+        model.triagleAdjacencyIndices.push_back(findAdj(triangle[1], triangle[2], adjecentTriangles, rawModel));
+        model.triagleAdjacencyIndices.push_back(findAdj(triangle[0], triangle[2], adjecentTriangles, rawModel));
     }
 
     return model;
+}
+
+unsigned int Importer::findAdj(unsigned int v1, unsigned int v2, std::vector<unsigned int> &adjacentTriangles, RawModel rawModel) {
+    v1 = rawModel.normals[v1].uniqueVertexId;
+    v2 = rawModel.normals[v2].uniqueVertexId;
+    for(auto &triangleId : adjacentTriangles) {
+        auto triangle = rawModel.triangles[triangleId];
+        triangle[0] = rawModel.normals[triangle[0]].uniqueVertexId;
+        triangle[1] = rawModel.normals[triangle[1]].uniqueVertexId;
+        triangle[2] = rawModel.normals[triangle[2]].uniqueVertexId;
+        if((v1 == triangle[0] && v2 == triangle[1]) || (v2 == triangle[0] && v1 == triangle[1]))
+            return triangle[2];
+        if((v1 == triangle[1] && v2 == triangle[2]) || (v2 == triangle[1] && v1 == triangle[2]))
+            return triangle[0];
+        if((v1 == triangle[0] && v2 == triangle[2]) || (v2 == triangle[0] && v1 == triangle[2]))
+            return triangle[1];
+    }
+    assert(false);
 }
 
 RawModel Importer::loadRawModel(const std::string &path) {

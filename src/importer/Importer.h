@@ -17,6 +17,9 @@ class Importer {
     static RawModel loadRawModel(const std::string &path);
 public:
     static Model loadModel(const std::string& path);
+
+    static unsigned int findAdj(unsigned int v1, unsigned int v2, std::vector<unsigned int> &adjacentTriangles,
+                                RawModel vector);
 };
 
 

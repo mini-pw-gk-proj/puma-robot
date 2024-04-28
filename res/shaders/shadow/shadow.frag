@@ -3,6 +3,7 @@ out vec4 fragColor;
 
 in vec3 normal;
 in vec3 fragPos;
+in vec4 hueChange;
 
 uniform vec3 viewPos;
 
@@ -49,5 +50,5 @@ void main()
     result += calculateLight(pointLight, normNormal, fragPos, viewDir);
     result *= objectColor.rgb;
 
-    fragColor = vec4(result, objectColor.a);
+    fragColor = vec4(result, objectColor.a) + hueChange;
 }

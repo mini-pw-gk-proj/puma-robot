@@ -72,6 +72,9 @@ void Gui::showSceneWindow() {
     showScene();
 
     ImGui::Begin("Scene Window");
+
+    // Robot
+
     bool fieldModified = false;
     // User input for free angles.
     ImGui::SeparatorText("Arm angles");
@@ -94,6 +97,10 @@ void Gui::showSceneWindow() {
     bool animated = appContext.robot->kinematics.movementState == RobotKinematics::AnimatedInverseKinematics;
     fieldModified |= ImGui::Checkbox("Animation", &animated);
     if(fieldModified) appContext.robot->kinematics.movementState = animated? RobotKinematics::AnimatedInverseKinematics: RobotKinematics::FreeAngles;
+
+    // Point Light
+
+    ImGui::DragFloat3("Light position", glm::value_ptr(appContext.pointLight.position), 0.02f);
 
     ImGui::End();
 }

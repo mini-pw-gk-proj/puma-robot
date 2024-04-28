@@ -44,6 +44,19 @@ Model Cylinder::generateCylinder (float radius, float height, int slices)
         vertices.push_back({glm::vec3(x, -height / 2.0f, z), glm::normalize(glm::vec3(x, 0.0f, z))});
     }
 
+    // Generate side vertices for faces
+    for (int i = 0; i <= slices; ++i) {
+        float angle = static_cast<float>(i) * angleStep;
+        float x = radius * std::cos(angle);
+        float z = radius * std::sin(angle);
+
+        // Top vertex for faces
+        vertices.push_back({glm::vec3(x, height / 2.0f, z), glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f))});
+
+        // Bottom vertex for faces
+        vertices.push_back({glm::vec3(x, -height / 2.0f, z), glm::normalize(glm::vec3(0.0f, -1.0f, 0.0f))});
+    }
+
     // Generate indices for the sides
     for (int i = 0; i < slices * 2; i += 2) {
         // Triangle 1
@@ -60,14 +73,14 @@ Model Cylinder::generateCylinder (float radius, float height, int slices)
     // Generate indices for the top and bottom faces
     for (int i = 0; i < slices; ++i) {
         // Top face
-        indices.push_back(i * 2);
-        indices.push_back(vertices.size() / 2);
-        indices.push_back((i + 1) * 2);
+        indices.push_back((vertices.size()/2) + i * 2);
+        indices.push_back((vertices.size()/2) + vertices.size() / 4);
+        indices.push_back((vertices.size()/2) + (i + 1) * 2);
 
         // Bottom face
-        indices.push_back(i * 2 + 1);
-        indices.push_back((i + 1) * 2 + 1);
-        indices.push_back(vertices.size() / 2 + 1);
+        indices.push_back((vertices.size()/2) + i * 2 + 1);
+        indices.push_back((vertices.size()/2) + (i + 1) * 2 + 1);
+        indices.push_back((vertices.size()/2) + vertices.size() / 4 + 1);
     }
 
     // Assign vertices and indices to the model

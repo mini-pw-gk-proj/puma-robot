@@ -60,6 +60,7 @@ set(APP_SRC
         src/room/Room.h
         src/cylinder/Cylinder.cpp
         src/cylinder/Cylinder.h
+        src/light/PointLight.h
 )
 
 # Include directories

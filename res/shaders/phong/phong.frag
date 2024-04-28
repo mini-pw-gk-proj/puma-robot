@@ -50,6 +50,4 @@ void main()
     result *= objectColor.rgb;
 
     fragColor = vec4(result, objectColor.a);
-//    fragColor = vec4(normal, 1);
-//    fragColor = vec4(gl_PrimitiveID%3==0, gl_PrimitiveID%3==1,gl_PrimitiveID%3==2,1);
 }

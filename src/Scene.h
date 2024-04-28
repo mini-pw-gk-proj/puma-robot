@@ -14,6 +14,7 @@ class Scene {
 
     Shader whiteShader;
     Shader phongShader;
+    Shader shadowShader;
 
     AppContext &appContext;
 
@@ -21,6 +22,12 @@ public:
     explicit Scene(AppContext &appContext);
     void update();
     void render();
+
+    void drawShadowVolume();
+    void setupPhong(PointLight light);
+    void drawScene();
+    void createShadowMask();
+    void setupShadowedPhong();
 };
 
 

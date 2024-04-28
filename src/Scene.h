@@ -18,16 +18,23 @@ class Scene {
 
     AppContext &appContext;
 
-public:
-    explicit Scene(AppContext &appContext);
-    void update();
-    void render();
+    void drawMirrorScene(PointLight light);
+    void setupMirrorPhong(PointLight light);
+    void drawSceneNoMirror();
+    void drawSceneOnlyMirror();
 
     void drawShadowVolume();
     void setupPhong(PointLight light);
     void drawScene();
     void createShadowMask();
     void setupShadowedPhong();
+
+public:
+    explicit Scene(AppContext &appContext);
+    void update();
+    void render();
+
+
 };
 
 

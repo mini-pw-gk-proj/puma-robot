@@ -25,12 +25,15 @@ void Scene::render() {
     auto t = appContext.pointLight;
     t.strength = 1; // Let a little bit of light in the shadows.
     setupPhong(t);
-    drawScene();
+    drawSceneNoMirror();
 
-    // Render shadowed scene
-    createShadowMask();
-    setupShadowedPhong();
-    drawScene();
+    // Mirror world
+    drawMirrorScene(appContext.pointLight);
+
+//    // Render shadowed scene
+//    createShadowMask();
+//    setupShadowedPhong();
+//    drawScene();
 
     // Clean-up
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
@@ -105,6 +108,58 @@ void Scene::drawScene() {
     appContext.robot->render(phongShader);
     appContext.room->render(phongShader);
     appContext.cylinder->render(phongShader);
+    appContext.mirror->render(phongShader);
+}
+
+void Scene::drawMirrorScene (PointLight light)
+{
+
+
+    // 1. Turn off depth and color buffers
+    glDepthMask(GL_FALSE);
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+    // 3. Set the stencil operation to increment on depth fail (only count shadows behind the object).
+    glStencilMask(0xFF);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    drawSceneOnlyMirror();
+
+    // 6. Set the stencil operation to decrement on depth fail.
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilFunc(GL_EQUAL, 1, 0xFF);
+
+    glDepthMask(GL_TRUE);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glFrontFace(GL_CW);
+
+    setupMirrorPhong(light);
+    drawSceneNoMirror();
+
+    glFrontFace(GL_CCW);
+}
+
+void Scene::setupMirrorPhong (PointLight light)
+{
+    phongShader.use();
+    phongShader.setUniform("view", appContext.camera.getMirrorViewMatrix());
+    phongShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    phongShader.setUniform("viewPos", appContext.camera.getViewPosition());
+    phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
+    phongShader.setUniform("material.shininess", 16);
+    light.setupPointLight(phongShader);
+}
+
+void Scene::drawSceneNoMirror ()
+{
+    appContext.robot->render(phongShader);
+    appContext.room->render(phongShader);
+    appContext.cylinder->render(phongShader);
+}
+
+void Scene::drawSceneOnlyMirror ()
+{
     appContext.mirror->render(phongShader);
 }
 

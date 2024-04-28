@@ -9,6 +9,8 @@ Scene::Scene(AppContext &appContext) :
         whiteShader("../res/shaders/basic/position.vert", "../res/shaders/basic/white.frag"),
         phongShader("../res/shaders/phong/phong.vert", "../res/shaders/phong/phong.frag"),
         shadowShader("../res/shaders/shadow/shadow.vert", "../res/shaders/shadow/shadow.geom","../res/shaders/shadow/shadow.frag"),
+        skyboxShader("../res/shaders/skybox/skybox.vert","../res/shaders/skybox/skybox.frag"),
+        trailShader("../res/shaders/trail/trail.vert","../res/shaders/trail/trail.geom", "../res/shaders/trail/trail.frag"),
         appContext(appContext)
     {}
 
@@ -16,6 +18,8 @@ void Scene::update() {
     auto timeS = float(glfwGetTime());
 
     appContext.robot->update(timeS);
+
+    appContext.trail->update(appContext.robot->kinematics.movementState != RobotKinematics::AnimatedInverseKinematics);
 }
 
 void Scene::render() {
@@ -35,6 +39,20 @@ void Scene::render() {
     // Clean-up
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
     glDepthFunc(GL_LESS);
+
+    // Skybox
+    skyboxShader.use();
+    skyboxShader.setUniform("view", appContext.camera.getNoTranslationViewMatrix());
+    skyboxShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    skyboxShader.setUniform("skybox", 0);
+    appContext.skybox->render();
+
+    // Trail
+    trailShader.use();
+    trailShader.setUniform("view", appContext.camera.getViewMatrix());
+    trailShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    appContext.trail->render(trailShader);
+
 
     appContext.frameBufferManager->unbind();
 }

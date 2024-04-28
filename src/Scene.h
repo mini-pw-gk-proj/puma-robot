@@ -15,6 +15,8 @@ class Scene {
     Shader whiteShader;
     Shader phongShader;
     Shader shadowShader;
+    Shader skyboxShader;
+    Shader trailShader;
 
     AppContext &appContext;
 

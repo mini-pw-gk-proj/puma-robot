@@ -152,3 +152,7 @@ void Camera::resize (int screenWidth, int screenHeight)
     this->screenWidth = screenWidth;
     this->screenHeight = screenHeight;
 }
+
+glm::mat4 Camera::getNoTranslationViewMatrix() const {
+    return glm::mat3(myLookAt(position, position + front, up));
+}

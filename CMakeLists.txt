@@ -63,6 +63,13 @@ set(APP_SRC
         src/light/PointLight.h
         src/mirror/Mirror.cpp
         src/mirror/Mirror.h
+        src/skybox/Skybox.cpp
+        src/skybox/Skybox.h
+        src/mesh/PositionVertex.h
+        src/skybox/Skybox.cpp
+        src/trail/Trail.cpp
+        src/trail/Trail.h
+        src/mesh/EmptyVertex.h
 )
 
 # Include directories

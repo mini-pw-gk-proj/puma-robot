@@ -85,7 +85,7 @@ void Scene::createShadowMask() {
     glStencilOp(GL_KEEP, GL_INCR, GL_KEEP);
 
     // Offset shadow volume a little bit to mitigate z-fighting.
-    glPolygonOffset(0.5, 0.5);
+    glPolygonOffset(0.3, 0.3);
 
     // 4. Render the shadow volumes.
     drawShadowVolume();
@@ -106,6 +106,7 @@ void Scene::drawShadowVolume() {
     shadowShader.setUniform("projection", appContext.camera.getProjectionMatrix());
     shadowShader.setUniform("lightPos", appContext.pointLight.position);
 
+    appContext.mirror->renderShadow(shadowShader);
     appContext.robot->renderShadow(shadowShader);
 }
 

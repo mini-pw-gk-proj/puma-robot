@@ -13,6 +13,7 @@
 class Mirror
 {
     std::unique_ptr<Mesh<PositionNormalVertex>> mesh;
+    std::unique_ptr<Mesh<PositionNormalVertex>> meshVolume;
 
     static Model generateMirrorPlane();
 
@@ -21,6 +22,9 @@ public:
     Mirror();
 
     void render(Shader &shader);
+    void renderShadow(Shader &shader);
+
+    static glm::mat4 getModel() ;
 };
 
 

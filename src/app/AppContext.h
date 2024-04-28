@@ -9,6 +9,7 @@
 #include "../robot/Robot.h"
 #include "../room/Room.h"
 #include "../cylinder/Cylinder.h"
+#include "../mirror/Mirror.h"
 #include "../camera/Camera.h"
 #include "../framebufferManager/FrameBufferManager.h"
 #include "../importer/Importer.h"
@@ -19,6 +20,8 @@ struct AppContext {
     std::unique_ptr<Robot> robot;
 
     std::unique_ptr<Room> room;
+
+    std::unique_ptr<Mirror> mirror;
 
     std::unique_ptr<Cylinder> cylinder;
 
@@ -50,6 +53,7 @@ struct AppContext {
             robot = std::make_unique<Robot>(standModel, armModels);
             room = std::make_unique<Room>();
             cylinder = std::make_unique<Cylinder>();
+            mirror = std::make_unique<Mirror>();
         }
 };
 

@@ -61,6 +61,8 @@ set(APP_SRC
         src/cylinder/Cylinder.cpp
         src/cylinder/Cylinder.h
         src/light/PointLight.h
+        src/mirror/Mirror.cpp
+        src/mirror/Mirror.h
 )
 
 # Include directories

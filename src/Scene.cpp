@@ -105,5 +105,6 @@ void Scene::drawScene() {
     appContext.robot->render(phongShader);
     appContext.room->render(phongShader);
     appContext.cylinder->render(phongShader);
+    appContext.mirror->render(phongShader);
 }
 

@@ -28,11 +28,17 @@ public:
         FreeInverseKinematics = 1,
         AnimatedInverseKinematics = 2,
     };
+    enum Animation {
+        Infinity = 0,
+        Chaotic = 1,
+        Circle = 2,
+    };
 
     std::array<float, ARM_COUNT> armRotationAngles{};
     glm::vec3 needlePosition{};
     glm::vec3 needleOrientation{};
     MovementState movementState;
+    Animation animation = Infinity;
 
 private:
     static void inverseKinematics(glm::vec3 pos, glm::vec3 normal, float &a1, float &a2, float &a3, float &a4, float &a5);

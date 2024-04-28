@@ -98,6 +98,11 @@ void Gui::showSceneWindow() {
     fieldModified |= ImGui::Checkbox("Animation", &animated);
     if(fieldModified) appContext.robot->kinematics.movementState = animated? RobotKinematics::AnimatedInverseKinematics: RobotKinematics::FreeAngles;
 
+    ImGui::SameLine();
+    const char* items[] = { "Infinity", "Chaotic", "Circle"};
+    int &i = reinterpret_cast<int &>(appContext.robot->kinematics.animation);
+    ImGui::Combo("##combo", &i, items, IM_ARRAYSIZE(items));
+
     // Point Light
 
     ImGui::DragFloat3("Light position", glm::value_ptr(appContext.pointLight.position), 0.02f);

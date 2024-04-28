@@ -42,13 +42,38 @@ void RobotKinematics::inverseKinematics(glm::vec3 pos, glm::vec3 normal, float &
 }
 
 void RobotKinematics::updateAnimation(float timeS) {
-    float speed = 2;
-    float r = 0.3;
-    float r_1 = 0.2;
     float distance = 1.7;
     float angle = M_PI/6;
 
-    glm::vec4 circle(0.f, r*cos(timeS * speed) + r_1*sin(timeS*2.4 * speed), r * sin(timeS*speed) + r_1*cos(timeS*3.1 * speed), 1.f);
+    double x, y;
+
+    switch(animation) {
+        case Infinity: {
+            float speed = 2;
+            double t = timeS * speed;
+            float a = 0.5;
+            x = (a * std::sqrt(2) * cos(t) * sin(t)) / (sin(t) * sin(t) + 1);
+            y = (a * std::sqrt(2) * cos(t)) / (sin(t) * sin(t) + 1);
+            break;
+        }
+        case Chaotic: {
+            double speed = 2;
+            double r = 0.3;
+            double r_1 = 0.2;
+            x = r*cos(timeS * speed) + r_1*sin(timeS*2.4 * speed);
+            y = r * sin(timeS*speed) + r_1*cos(timeS*3.1 * speed);
+            break;
+        }
+        case Circle: {
+            double speed = 3;
+            double r = 0.3;
+            x = r*cos(timeS * speed);
+            y = r * sin(timeS*speed);
+            break;
+        }
+    }
+
+    glm::vec4 circle(0.f, x, y, 1.f);
     circle = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0, 0 ,1)) * circle;
     circle += glm::vec4(-distance,0,0,0);
     needlePosition = circle;

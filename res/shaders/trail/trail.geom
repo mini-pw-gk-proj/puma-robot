@@ -17,7 +17,7 @@ void main() {
     int cur = caret == 0? TRAIL_POINTS-1 : caret - 1;
     for(int i=0; i<pointCount; i++)
     {
-        opacity = startingOpacity * (1 - float(i + TRAIL_POINTS - pointCount) / TRAIL_POINTS);
+        opacity = startingOpacity * (1 - float(i) / TRAIL_POINTS);
         gl_Position = projection * view * vec4(trailPoints[cur], 1);
         EmitVertex();
 

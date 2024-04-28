@@ -101,7 +101,14 @@ RobotKinematics::RobotKinematics() {
     startingNeedlePosition = {-2.05f, 0.27f, 0};
     startingNeedleOrientation = {1.f, 0, 0};
 
-    armRotationAngles = std::array<float, ARM_COUNT>();
+    armRotationAngles = {{
+        0.0f,
+        0.6f,
+        -1.5f,
+        0.0f,
+        1.4f,
+
+    }};
     needlePosition = startingNeedlePosition;
     needleOrientation = startingNeedleOrientation;
     movementState = FreeAngles;

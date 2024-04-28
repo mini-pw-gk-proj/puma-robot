@@ -36,7 +36,7 @@ void main()
 
 void emitVertex(int i, bool extrude) {
     vec3 vector = normalize(vec3(gl_in[i].gl_Position) - lightPos);
-    vec4 offset = !extrude ? vec4(vector*10, 0) : vec4(0);
+    vec4 offset = !extrude ? vec4(vector*20, 0) : vec4(0);
     vec4 position = gl_in[i].gl_Position + offset;
     gl_Position = projection * view * position;
     EmitVertex();

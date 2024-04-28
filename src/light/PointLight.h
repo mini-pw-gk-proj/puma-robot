@@ -11,7 +11,7 @@ struct PointLight {
 
     glm::vec3 position = glm::vec3(0, 2, 1);
     glm::vec3 color = glm::vec3(1.0f);
-    float strength = 4.0f;
+    float strength = 6.0f;
     float constantAttenuation = 1.0f;
     float linearAttenuation = 0.7f;
     float quadraticAttenuation = 1.8f;

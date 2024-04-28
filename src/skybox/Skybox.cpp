@@ -27,17 +27,17 @@ void Skybox::setupCubemap() {
             auto rnd = dist(prng);
             if(rnd > 0.999) {
                 arr[i*4+0] = 1 + dist2(prng);
-                arr[i*4+1] = 1 + dist2(prng);
                 arr[i*4+2] = 1 + dist2(prng);
+                arr[i*4+1] = std::min(std::min(1 + dist1(prng), arr[i*4+0]), arr[i*4+2]);
             }
             else if(rnd > 0.995) {
                 arr[i*4+0] = 0.9f + dist1(prng);
-                arr[i*4+1] = 0.9f + dist1(prng);
                 arr[i*4+2] = 0.9f + dist1(prng);
+                arr[i*4+1] = std::min(std::min(0.9f + dist1(prng), arr[i*4+0]), arr[i*4+2]);
             } else if(rnd > 0.98) {
                 arr[i*4+0] = 0.6f + dist1(prng);
-                arr[i*4+1] = 0.6f + dist1(prng);
                 arr[i*4+2] = 0.6f + dist1(prng);
+                arr[i*4+1] = std::min(std::min(0.6f + dist1(prng), arr[i*4+0]), arr[i*4+2]);
             } else {
                 arr[i*4+0] = 0;
                 arr[i*4+1] = 0;

@@ -15,12 +15,12 @@ class RobotKinematics {
     static constexpr int MODEL_COUNT = 6;
     static constexpr int ARM_COUNT = 5;
 
-    std::array<glm::vec3, ARM_COUNT> armRotationAxisOffsets;
-    std::array<glm::vec3, ARM_COUNT> armRotationAxes;
+    std::array<glm::vec3, ARM_COUNT> armRotationAxisOffsets{};
+    std::array<glm::vec3, ARM_COUNT> armRotationAxes{};
     glm::vec3 startingNeedlePosition{};
     glm::vec3 startingNeedleOrientation{};
 
-    std::array<glm::mat4, MODEL_COUNT> modelMatrices;
+    std::array<glm::mat4, MODEL_COUNT> modelMatrices{};
 
 public:
     enum MovementState {
@@ -29,7 +29,7 @@ public:
         AnimatedInverseKinematics = 2,
     };
 
-    std::array<float, ARM_COUNT> armRotationAngles;
+    std::array<float, ARM_COUNT> armRotationAngles{};
     glm::vec3 needlePosition{};
     glm::vec3 needleOrientation{};
     MovementState movementState;

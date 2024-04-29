@@ -42,7 +42,7 @@ void RobotKinematics::inverseKinematics(glm::vec3 pos, glm::vec3 normal, float &
 }
 
 void RobotKinematics::updateAnimation(float timeS) {
-    float distance = 1.7;
+    float distance = 1.4;
     float angle = M_PI/6;
 
     double x, y;
@@ -71,6 +71,13 @@ void RobotKinematics::updateAnimation(float timeS) {
             y = r * sin(timeS*speed);
             break;
         }
+        case Pi: {
+            double speed = 1;
+            y = -0.0035 * piShape.getX(0, timeS * speed, 0);
+            x = -0.0035 * piShape.getY(-50, (timeS * speed), M_PI / 2);
+            break;
+        }
+
     }
 
     glm::vec4 circle(0.f, x, y, 1.f);
@@ -129,8 +136,8 @@ RobotKinematics::RobotKinematics() {
 
     armRotationAngles = {{
         0.0f,
-        0.6f,
-        -1.5f,
+        0.85f,
+        -1.95f,
         0.0f,
         1.4f,
 

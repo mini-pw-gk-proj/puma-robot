@@ -70,6 +70,9 @@ set(APP_SRC
         src/trail/Trail.cpp
         src/trail/Trail.h
         src/mesh/EmptyVertex.h
+        src/fourier/FourierShape.h
+        src/fourier/FourierShapeFactory.cpp
+        src/fourier/FourierShapeFactory.h
 )
 
 # Include directories

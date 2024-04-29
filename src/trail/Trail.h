@@ -14,7 +14,7 @@ class Trail {
 
     Robot &robot;
 
-    static constexpr int TRAIL_POINTS = 100;
+    static constexpr int TRAIL_POINTS = 200;
     std::array<glm::vec3, TRAIL_POINTS> trailPoints{};
     int pointCount{};
     int caret{};

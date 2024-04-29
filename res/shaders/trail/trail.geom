@@ -1,5 +1,5 @@
 #version 400 core
-#define TRAIL_POINTS 100
+#define TRAIL_POINTS 200
 layout (points) in;
 layout (line_strip, max_vertices = TRAIL_POINTS) out;
 

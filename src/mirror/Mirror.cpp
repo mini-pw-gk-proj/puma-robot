@@ -72,7 +72,7 @@ void Mirror::renderShadow(Shader &shader) {
 glm::mat4 Mirror::getModel() {
     glm::mat4 model(1.0f);
     model = glm::rotate(model, (float)M_PI/6, glm::vec3(0,0,1));
-    model = glm::translate(model, glm::vec3{-1.49f, 1.0f, 0.0f});
+    model = glm::translate(model, glm::vec3{-1.23f, 1.0f, 0.0f});
     model = glm::scale(model, glm::vec3(2,2,2));
     return model;
 }

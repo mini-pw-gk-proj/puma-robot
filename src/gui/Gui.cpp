@@ -99,7 +99,7 @@ void Gui::showSceneWindow() {
     if(fieldModified) appContext.robot->kinematics.movementState = animated? RobotKinematics::AnimatedInverseKinematics: RobotKinematics::FreeAngles;
 
     ImGui::SameLine();
-    const char* items[] = { "Infinity", "Chaotic", "Circle"};
+    const char* items[] = { "Pi", "Infinity", "Chaotic", "Circle"};
     int &i = reinterpret_cast<int &>(appContext.robot->kinematics.animation);
     ImGui::Combo("##combo", &i, items, IM_ARRAYSIZE(items));
 

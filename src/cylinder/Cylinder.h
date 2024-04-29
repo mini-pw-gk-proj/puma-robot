@@ -13,6 +13,7 @@
 class Cylinder
 {
     std::unique_ptr<Mesh<PositionNormalVertex>> mesh;
+    std::unique_ptr<Mesh<PositionNormalVertex>> meshVolume;
 
     static Model generateCylinder(float radius, float height, int slices);
 
@@ -23,6 +24,9 @@ public:
     Cylinder();
 
     void render(Shader &shader);
+    void renderShadow(Shader &shader);
+
+    static glm::mat4 getModel();
 };
 
 

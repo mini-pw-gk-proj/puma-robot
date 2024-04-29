@@ -107,6 +107,7 @@ void Scene::drawShadowVolume() {
     shadowShader.setUniform("lightPos", appContext.pointLight.position);
 
     appContext.mirror->renderShadow(shadowShader);
+    appContext.cylinder->renderShadow(shadowShader);
     appContext.robot->renderShadow(shadowShader);
 }
 

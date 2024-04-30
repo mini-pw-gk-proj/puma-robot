@@ -14,16 +14,19 @@
 #include "../framebufferManager/FrameBufferManager.h"
 #include "../importer/Importer.h"
 #include "../light/PointLight.h"
+#include "../skybox/Skybox.h"
+#include "../trail/Trail.h"
+#include "../point/Point.h"
 
 
 struct AppContext {
     std::unique_ptr<Robot> robot;
-
     std::unique_ptr<Room> room;
-
     std::unique_ptr<Mirror> mirror;
-
     std::unique_ptr<Cylinder> cylinder;
+    std::unique_ptr<Skybox> skybox;
+    std::unique_ptr<Trail> trail;
+    std::unique_ptr<Point> light;
 
     PointLight pointLight;
     Camera camera;
@@ -54,6 +57,9 @@ struct AppContext {
             room = std::make_unique<Room>();
             cylinder = std::make_unique<Cylinder>();
             mirror = std::make_unique<Mirror>();
+            skybox = std::make_unique<Skybox>();
+            trail = std::make_unique<Trail>(*robot);
+            light = std::make_unique<Point>();
         }
 };
 

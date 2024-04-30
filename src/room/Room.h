@@ -9,10 +9,12 @@
 #include "../mesh/Mesh.h"
 #include "../mesh/PositionNormalVertex.h"
 #include "../importer/Model.h"
+#include "../material/Material.h"
 
 class Room
 {
     std::unique_ptr<Mesh<PositionNormalVertex>> mesh;
+    Material material{{1,1,1,1},0.9,0};
 
     static Model generateRoom(float width, float height, float depth);
 

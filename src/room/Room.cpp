@@ -6,12 +6,13 @@
 
 Room::Room ()
 {
-    auto room = generateRoom(10, 10, 10);
+    auto room = generateRoom(6, 6, 6);
     mesh = std::make_unique<Mesh<PositionNormalVertex>>(room.vertices, room.triagleIndices);
 }
 
 void Room::render (Shader &shader)
 {
+    material.setupMaterial(shader);
     shader.setUniform("model", glm::mat4(1));
     mesh->render();
 }

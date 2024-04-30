@@ -23,6 +23,7 @@ void Robot::update(float timeS) {
 }
 
 void Robot::render(Shader &shader) {
+    material.setupMaterial(shader);
     shader.setUniform("model", kinematics.getModel(0));
     standMesh->render();
     for (int i = 0; i < armMeshes.size(); i++) {

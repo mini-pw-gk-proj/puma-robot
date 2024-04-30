@@ -32,10 +32,10 @@ void Scene::render() {
     drawSceneOnlyMirrorBack();
     drawSceneNoMirror();
 
-//    // Render shadowed scene
-//    createShadowMask();
-//    setupShadowedPhong();
-//    drawScene();
+    // Render shadowed scene
+    createShadowMask();
+    setupShadowedPhong();
+    drawSceneNoMirror();
 
     // Clean-up
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
@@ -67,6 +67,7 @@ void Scene::createShadowMask() {
     glCullFace(GL_FRONT);
 
     // 3. Set the stencil operation to increment on depth fail (only count shadows behind the object).
+    glClear(GL_STENCIL_BUFFER_BIT);
     glStencilMask(0xFF);
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
     glStencilOp(GL_KEEP, GL_INCR, GL_KEEP);

@@ -17,8 +17,8 @@ class Mirror
     std::unique_ptr<Mesh<PositionNormalVertex>> meshBack;
     std::unique_ptr<Mesh<PositionNormalVertex>> meshVolume;
 
-    Material material{{1,1,1,1},0.2,0.5};
-    Material transparentMaterial{{1,1,1,0.4},0.2,0.5};
+    Material material{{113/256.f, 121/256.f, 126/256.f,1},0.2,0.5};
+    Material transparentMaterial{{113/256.f, 121/256.f, 126/256.f, 0.6},0.2,0.5};
 
     static Model generateMirrorPlane();
     static Model generateMirrorPlaneFront();

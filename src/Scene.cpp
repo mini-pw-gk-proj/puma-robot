@@ -28,6 +28,7 @@ void Scene::render() {
     appContext.frameBufferManager->bind();
 
     // Mirror world
+    setupPhong(appContext.pointLight);
     drawMirrorScene(appContext.pointLight);
 
     // Render scene
@@ -129,8 +130,6 @@ void Scene::setupPhong(PointLight light) {
     pbrShader.setUniform("view", appContext.camera.getViewMatrix());
     pbrShader.setUniform("projection", appContext.camera.getProjectionMatrix());
     pbrShader.setUniform("viewPos", appContext.camera.getViewPosition());
-    pbrShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
-    pbrShader.setUniform("material.shininess", 16);
     light.setupPointLight(pbrShader);
 }
 
@@ -177,30 +176,26 @@ void Scene::drawMirrorScene (PointLight light)
 
 void Scene::setupMirrorPhong (PointLight light)
 {
-    phongShader.use();
-    phongShader.setUniform("view", appContext.camera.getMirrorViewMatrix());
-    phongShader.setUniform("projection", appContext.camera.getProjectionMatrix());
-    phongShader.setUniform("viewPos", appContext.camera.getViewPosition());
-    phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
-    phongShader.setUniform("material.shininess", 16);
-    light.setupPointLight(phongShader);
+    pbrShader.use();
+    pbrShader.setUniform("view", appContext.camera.getMirrorViewMatrix());
+    pbrShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    pbrShader.setUniform("viewPos", appContext.camera.getViewPosition());
+    light.setupPointLight(pbrShader);
 }
 
 void Scene::drawSceneNoMirror ()
 {
-    appContext.robot->render(phongShader);
-    appContext.room->render(phongShader);
-    appContext.cylinder->render(phongShader);
+    appContext.robot->render(pbrShader);
+    appContext.room->render(pbrShader);
+    appContext.cylinder->render(pbrShader);
 }
 
 void Scene::drawSceneOnlyMirrorFront ()
 {
-    phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 0.5));
-    appContext.mirror->renderFront(phongShader);
-    phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
+    appContext.mirror->renderFront(pbrShader);
 }
 void Scene::drawSceneOnlyMirrorBack ()
 {
-    appContext.mirror->renderBack(phongShader);
+    appContext.mirror->renderBack(pbrShader);
 }
 

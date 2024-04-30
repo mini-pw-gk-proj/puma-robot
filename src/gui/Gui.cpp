@@ -104,8 +104,21 @@ void Gui::showSceneWindow() {
     ImGui::Combo("##combo", &i, items, IM_ARRAYSIZE(items));
 
     // Point Light
+    ImGui::SeparatorText("Light");
 
     ImGui::DragFloat3("Light position", glm::value_ptr(appContext.pointLight.position), 0.02f);
+
+    const char* itemsL[] = { "40W Tungsten", "100W Tungsten", "Halogen" , "Carbon Arc"};
+    const std::map<int, glm::vec3> lights {
+            {0, glm::vec3(255/255.f, 197/255.f, 143/255.f)},
+            {1, glm::vec3(255/255.f, 214/255.f, 170/255.f)},
+            {2, glm::vec3(255/255.f, 241/255.f, 224/255.f)},
+            {3, glm::vec3(255/255.f, 250/255.f, 244/255.f)},
+    };
+    static int chosenLight = 1;
+    if(ImGui::Combo("Color##combo", &chosenLight, itemsL, IM_ARRAYSIZE(items)))
+        appContext.pointLight.color = lights.at(chosenLight);
+
 
     ImGui::End();
 }

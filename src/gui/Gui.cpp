@@ -94,14 +94,14 @@ void Gui::showSceneWindow() {
     }
     fieldModified = false;
 
-    bool animated = appContext.robot->kinematics.movementState == RobotKinematics::AnimatedInverseKinematics;
-    fieldModified |= ImGui::Checkbox("Animation", &animated);
-    if(fieldModified) appContext.robot->kinematics.movementState = animated? RobotKinematics::AnimatedInverseKinematics: RobotKinematics::FreeAngles;
-
-    ImGui::SameLine();
     const char* items[] = { "Pi", "Infinity", "Chaotic", "Circle"};
     int &i = reinterpret_cast<int &>(appContext.robot->kinematics.animation);
     ImGui::Combo("##combo", &i, items, IM_ARRAYSIZE(items));
+
+    ImGui::SameLine();
+    bool animated = appContext.robot->kinematics.movementState == RobotKinematics::AnimatedInverseKinematics;
+    fieldModified |= ImGui::Checkbox("Animation", &animated);
+    if(fieldModified) appContext.robot->kinematics.movementState = animated? RobotKinematics::AnimatedInverseKinematics: RobotKinematics::FreeAngles;
 
     // Point Light
     ImGui::SeparatorText("Light");

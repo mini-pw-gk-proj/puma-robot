@@ -21,14 +21,16 @@ void Scene::update() {
 void Scene::render() {
     appContext.frameBufferManager->bind();
 
-    // Render scene as if it was in shadow
+    // Mirror world
+    drawMirrorScene(appContext.pointLight);
+
+    // Render scene
     auto t = appContext.pointLight;
     t.strength = 1; // Let a little bit of light in the shadows.
     setupPhong(t);
+    drawSceneOnlyMirrorFront();
+    drawSceneOnlyMirrorBack();
     drawSceneNoMirror();
-
-    // Mirror world
-    drawMirrorScene(appContext.pointLight);
 
 //    // Render shadowed scene
 //    createShadowMask();
@@ -113,8 +115,6 @@ void Scene::drawScene() {
 
 void Scene::drawMirrorScene (PointLight light)
 {
-
-
     // 1. Turn off depth and color buffers
     glDepthMask(GL_FALSE);
     glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
@@ -124,11 +124,12 @@ void Scene::drawMirrorScene (PointLight light)
     glStencilFunc(GL_ALWAYS, 1, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    drawSceneOnlyMirror();
+    drawSceneOnlyMirrorFront();
 
     // 6. Set the stencil operation to decrement on depth fail.
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-    glStencilFunc(GL_EQUAL, 1, 0xFF);
+    glStencilFuncSeparate(GL_FRONT, GL_EQUAL, 1, 0xFF);
+    glStencilFuncSeparate(GL_BACK, GL_NEVER, 1, 0xFF);
 
     glDepthMask(GL_TRUE);
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -138,6 +139,12 @@ void Scene::drawMirrorScene (PointLight light)
     drawSceneNoMirror();
 
     glFrontFace(GL_CCW);
+    glStencilFunc(GL_ALWAYS, 0, 0xFF);
+    glDepthFunc(GL_LESS);
+
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glDepthMask(GL_TRUE);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 }
 
 void Scene::setupMirrorPhong (PointLight light)
@@ -158,8 +165,14 @@ void Scene::drawSceneNoMirror ()
     appContext.cylinder->render(phongShader);
 }
 
-void Scene::drawSceneOnlyMirror ()
+void Scene::drawSceneOnlyMirrorFront ()
 {
-    appContext.mirror->render(phongShader);
+    phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 0.5));
+    appContext.mirror->renderFront(phongShader);
+    phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
+}
+void Scene::drawSceneOnlyMirrorBack ()
+{
+    appContext.mirror->renderBack(phongShader);
 }
 

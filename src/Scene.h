@@ -21,7 +21,8 @@ class Scene {
     void drawMirrorScene(PointLight light);
     void setupMirrorPhong(PointLight light);
     void drawSceneNoMirror();
-    void drawSceneOnlyMirror();
+    void drawSceneOnlyMirrorFront();
+    void drawSceneOnlyMirrorBack();
 
     void drawShadowVolume();
     void setupPhong(PointLight light);

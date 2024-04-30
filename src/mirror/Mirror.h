@@ -12,15 +12,19 @@
 
 class Mirror
 {
-    std::unique_ptr<Mesh<PositionNormalVertex>> mesh;
+    std::unique_ptr<Mesh<PositionNormalVertex>> meshFront;
+    std::unique_ptr<Mesh<PositionNormalVertex>> meshBack;
 
-    static Model generateMirrorPlane();
+    static Model generateMirrorPlaneFront();
+    static Model generateMirrorPlaneBack();
 
 public:
 
     Mirror();
 
     void render(Shader &shader);
+    void renderBack(Shader &shader);
+    void renderFront(Shader &shader);
 };
 
 

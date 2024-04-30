@@ -21,16 +21,21 @@ void Scene::update() {
 void Scene::render() {
     appContext.frameBufferManager->bind();
 
-    // Render scene as if it was in shadow
+    // Mirror world
+    drawMirrorScene(appContext.pointLight);
+
+    // Render scene
     auto t = appContext.pointLight;
     t.strength = 1; // Let a little bit of light in the shadows.
     setupPhong(t);
-    drawScene();
+    drawSceneOnlyMirrorFront();
+    drawSceneOnlyMirrorBack();
+    drawSceneNoMirror();
 
     // Render shadowed scene
     createShadowMask();
     setupShadowedPhong();
-    drawScene();
+    drawSceneNoMirror();
 
     // Clean-up
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
@@ -62,6 +67,7 @@ void Scene::createShadowMask() {
     glCullFace(GL_FRONT);
 
     // 3. Set the stencil operation to increment on depth fail (only count shadows behind the object).
+    glClear(GL_STENCIL_BUFFER_BIT);
     glStencilMask(0xFF);
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
     glStencilOp(GL_KEEP, GL_INCR, GL_KEEP);
@@ -106,5 +112,68 @@ void Scene::drawScene() {
     appContext.room->render(phongShader);
     appContext.cylinder->render(phongShader);
     appContext.mirror->render(phongShader);
+}
+
+void Scene::drawMirrorScene (PointLight light)
+{
+    // 1. Turn off depth and color buffers
+    glDepthMask(GL_FALSE);
+    glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+    // 3. Set the stencil operation to increment on depth fail (only count shadows behind the object).
+    glStencilMask(0xFF);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
+    drawSceneOnlyMirrorFront();
+
+    // 6. Set the stencil operation to decrement on depth fail.
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilFuncSeparate(GL_FRONT, GL_EQUAL, 1, 0xFF);
+    glStencilFuncSeparate(GL_BACK, GL_NEVER, 1, 0xFF);
+
+    glDepthMask(GL_TRUE);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glFrontFace(GL_CW);
+
+    setupMirrorPhong(light);
+    drawSceneNoMirror();
+
+    glFrontFace(GL_CCW);
+    glStencilFunc(GL_ALWAYS, 0, 0xFF);
+    glDepthFunc(GL_LESS);
+
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glDepthMask(GL_TRUE);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+}
+
+void Scene::setupMirrorPhong (PointLight light)
+{
+    phongShader.use();
+    phongShader.setUniform("view", appContext.camera.getMirrorViewMatrix());
+    phongShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    phongShader.setUniform("viewPos", appContext.camera.getViewPosition());
+    phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
+    phongShader.setUniform("material.shininess", 16);
+    light.setupPointLight(phongShader);
+}
+
+void Scene::drawSceneNoMirror ()
+{
+    appContext.robot->render(phongShader);
+    appContext.room->render(phongShader);
+    appContext.cylinder->render(phongShader);
+}
+
+void Scene::drawSceneOnlyMirrorFront ()
+{
+    phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 0.5));
+    appContext.mirror->renderFront(phongShader);
+    phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
+}
+void Scene::drawSceneOnlyMirrorBack ()
+{
+    appContext.mirror->renderBack(phongShader);
 }
 

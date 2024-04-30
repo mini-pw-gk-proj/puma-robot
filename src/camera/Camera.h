@@ -73,6 +73,7 @@ public:
     );
 
     [[nodiscard]] glm::mat4 getViewMatrix() const;
+    [[nodiscard]] glm::mat4 getMirrorViewMatrix() const;
     [[nodiscard]] glm::mat4 getProjectionMatrix() const;
     [[nodiscard]] glm::vec3 getViewPosition() const;
 

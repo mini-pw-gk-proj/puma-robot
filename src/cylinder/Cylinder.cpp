@@ -13,6 +13,7 @@ Cylinder::Cylinder ()
 
 void Cylinder::render (Shader &shader) {
     shader.setUniform("model", getModel());
+    material.setupMaterial(shader);
     mesh->render();
 }
 

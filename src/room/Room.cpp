@@ -12,6 +12,7 @@ Room::Room ()
 
 void Room::render (Shader &shader)
 {
+    material.setupMaterial(shader);
     shader.setUniform("model", glm::mat4(1));
     mesh->render();
 }

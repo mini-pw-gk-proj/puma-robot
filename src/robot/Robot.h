@@ -11,14 +11,16 @@
 #include "../mesh/PositionNormalVertex.h"
 #include "../importer/Model.h"
 #include "RobotKinematics.h"
+#include "../material/Material.h"
 
 class Robot {
-
     std::unique_ptr<Mesh<PositionNormalVertex>> standMesh;
     std::vector<Mesh<PositionNormalVertex>> armMeshes;
 
     std::unique_ptr<Mesh<PositionNormalVertex>> standMeshVolume;
     std::vector<Mesh<PositionNormalVertex>> armMeshesVolume;
+
+    Material material{{0.9,0.85,1,1},0.7,0.9};
 public:
     RobotKinematics kinematics;
 

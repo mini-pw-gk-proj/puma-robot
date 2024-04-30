@@ -73,6 +73,8 @@ set(APP_SRC
         src/fourier/FourierShape.h
         src/fourier/FourierShapeFactory.cpp
         src/fourier/FourierShapeFactory.h
+        src/material/Material.h
+        src/point/Point.h
 )
 
 # Include directories

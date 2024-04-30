@@ -7,10 +7,11 @@
 
 Scene::Scene(AppContext &appContext) :
         whiteShader("../res/shaders/basic/position.vert", "../res/shaders/basic/white.frag"),
-        phongShader("../res/shaders/phong/phong.vert", "../res/shaders/phong/phong.frag"),
+        pbrShader("../res/shaders/pbr/pbr.vert", "../res/shaders/pbr/pbr.frag"),
         shadowShader("../res/shaders/shadow/shadow.vert", "../res/shaders/shadow/shadow.geom","../res/shaders/shadow/shadow.frag"),
         skyboxShader("../res/shaders/skybox/skybox.vert","../res/shaders/skybox/skybox.frag"),
         trailShader("../res/shaders/trail/trail.vert","../res/shaders/trail/trail.geom", "../res/shaders/trail/trail.frag"),
+        pointShader("../res/shaders/point/point.vert","../res/shaders/point/point.frag"),
         appContext(appContext)
     {}
 
@@ -18,8 +19,9 @@ void Scene::update() {
     auto timeS = float(glfwGetTime());
 
     appContext.robot->update(timeS);
-
     appContext.trail->update(appContext.robot->kinematics.movementState != RobotKinematics::AnimatedInverseKinematics);
+    appContext.light->updateColor(glm::vec4(appContext.pointLight.color, 1.0f));
+    appContext.light->updatePosition(appContext.pointLight.position);
 }
 
 void Scene::render() {
@@ -27,7 +29,7 @@ void Scene::render() {
 
     // Render scene as if it was in shadow
     auto t = appContext.pointLight;
-    t.strength = 1; // Let a little bit of light in the shadows.
+    t.strength = 0.25; // Let a little bit of light in the shadows.
     setupPhong(t);
     drawScene();
 
@@ -53,6 +55,11 @@ void Scene::render() {
     trailShader.setUniform("projection", appContext.camera.getProjectionMatrix());
     appContext.trail->render(trailShader);
 
+    // Point
+    pointShader.use();
+    pointShader.setUniform("view", appContext.camera.getViewMatrix());
+    pointShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    appContext.light->render(pointShader);
 
     appContext.frameBufferManager->unbind();
 }
@@ -67,8 +74,8 @@ void Scene::setupShadowedPhong() {
     glCullFace(GL_BACK);
     glPolygonOffset(0, 0);
 
-    phongShader.use();
-    appContext.pointLight.setupPointLight(phongShader);
+    pbrShader.use();
+    appContext.pointLight.setupPointLight(pbrShader);
 }
 
 void Scene::createShadowMask() {
@@ -85,7 +92,7 @@ void Scene::createShadowMask() {
     glStencilOp(GL_KEEP, GL_INCR, GL_KEEP);
 
     // Offset shadow volume a little bit to mitigate z-fighting.
-    glPolygonOffset(0.3, 0.3);
+    glPolygonOffset(0.25, 0.25);
 
     // 4. Render the shadow volumes.
     drawShadowVolume();
@@ -112,19 +119,19 @@ void Scene::drawShadowVolume() {
 }
 
 void Scene::setupPhong(PointLight light) {
-    phongShader.use();
-    phongShader.setUniform("view", appContext.camera.getViewMatrix());
-    phongShader.setUniform("projection", appContext.camera.getProjectionMatrix());
-    phongShader.setUniform("viewPos", appContext.camera.getViewPosition());
-    phongShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
-    phongShader.setUniform("material.shininess", 16);
-    light.setupPointLight(phongShader);
+    pbrShader.use();
+    pbrShader.setUniform("view", appContext.camera.getViewMatrix());
+    pbrShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    pbrShader.setUniform("viewPos", appContext.camera.getViewPosition());
+    pbrShader.setUniform("material.albedo", glm::vec4(0.8, 0.8, 0.8, 1));
+    pbrShader.setUniform("material.shininess", 16);
+    light.setupPointLight(pbrShader);
 }
 
 void Scene::drawScene() {
-    appContext.robot->render(phongShader);
-    appContext.room->render(phongShader);
-    appContext.cylinder->render(phongShader);
-    appContext.mirror->render(phongShader);
+    appContext.robot->render(pbrShader);
+    appContext.room->render(pbrShader);
+    appContext.cylinder->render(pbrShader);
+    appContext.mirror->render(pbrShader);
 }
 

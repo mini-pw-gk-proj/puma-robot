@@ -9,11 +9,14 @@
 #include "../mesh/Mesh.h"
 #include "../mesh/PositionNormalVertex.h"
 #include "../importer/Model.h"
+#include "../material/Material.h"
 
 class Cylinder
 {
     std::unique_ptr<Mesh<PositionNormalVertex>> mesh;
     std::unique_ptr<Mesh<PositionNormalVertex>> meshVolume;
+
+    Material material{{1,1,1,1},0.4,0};
 
     static Model generateCylinder(float radius, float height, int slices);
 

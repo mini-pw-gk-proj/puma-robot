@@ -123,7 +123,7 @@ void Gui::showSceneWindow() {
     ImGui::End();
 }
 
-void Gui::showScene () const
+void Gui::showScene ()
 {
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
     static bool use_work_area = true;
@@ -148,5 +148,139 @@ void Gui::showScene () const
     ImVec2 canvas_sz = ImVec2{ viewportPanelSize.x, viewportPanelSize.y };
     ImGui::Image(reinterpret_cast<void*>(textureID), canvas_sz, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
+    pollEvents(canvas_sz);
+
     ImGui::End();
+}
+
+void Gui::pollEvents (ImVec2 canvas_sz)
+{
+    ImGui::SetCursorPos(ImVec2{0, 0});
+    ImGui::InvisibleButton("canvas", canvas_sz, ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
+    const bool is_hovered = ImGui::IsItemHovered(); // Hovered
+    const bool is_active = ImGui::IsItemActive();   // Held
+    static bool adding_line = false;
+    static ImVec2 startClick = ImVec2{0, 0};
+    const ImVec2 mouse_pos_in_canvas(ImGui::GetIO().MousePos);
+    auto io = ImGui::GetIO();
+
+    if (is_hovered && !adding_line && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+    {
+        startClick = mouse_pos_in_canvas;
+        adding_line = true;
+    }
+
+    if (adding_line)
+    {
+        appContext.camera.processMouseMovement((mouse_pos_in_canvas.x - startClick.x), (mouse_pos_in_canvas.y - startClick.y));
+//        camera->rotate(
+//                (mouse_pos_in_canvas.y - startClick.y) * ApplicationContext::Instance().sensitivity,
+//                (mouse_pos_in_canvas.x - startClick.x) * ApplicationContext::Instance().sensitivity
+//                      );
+        startClick = mouse_pos_in_canvas;
+        if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
+            adding_line = false;
+    }
+
+    if(is_hovered)
+    {
+        static auto deltaTime = static_cast<float>(glfwGetTime());
+        deltaTime = static_cast<float>(glfwGetTime()) - deltaTime;
+
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_W)))
+        {
+            appContext.camera.processKeyboard(FORWARD, deltaTime);
+        }
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_S)))
+        {
+            appContext.camera.processKeyboard(BACKWARD, deltaTime);
+        }
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_A)))
+        {
+            appContext.camera.processKeyboard(LEFT, deltaTime);
+        }
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_D)))
+        {
+            appContext.camera.processKeyboard(RIGHT, deltaTime);
+        }
+
+        if (io.KeyCtrl)
+        {
+            appContext.camera.processKeyboard(DOWN, deltaTime);
+        }
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_Space)))
+        {
+            appContext.camera.processKeyboard(UP, deltaTime);
+        }
+
+//        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_LeftShift)))
+//        {
+//            camera->speedUp();
+//        }
+//        if (ImGui::IsKeyReleased(ImGui::GetKeyIndex(ImGuiKey_LeftShift)))
+//        {
+//            camera->speedDown();
+//        }
+//        if(ImGui::IsMouseDown(ImGuiMouseButton_Right))
+//        {
+//            float xProj = (((mouse_pos_in_canvas.x - this->pos.x) / this->size.x ) - 0.5f) * 2.0f;
+//            float yProj = - (((mouse_pos_in_canvas.y - this->pos.y) / this->size.y ) - 0.5f) * 2.0f;
+//            float zProj = 0.98f;
+//            float wProj = 1.00f;
+//
+//            glm::mat4 invMat = glm::inverse(camera->getProjMat() * camera->getViewMat());
+//            glm::vec4 worldPoint = invMat * glm::vec4(xProj, yProj, zProj, wProj);
+//
+//            worldPoint /= worldPoint.w;
+//
+//            ApplicationContext::Instance().axis->setPos(worldPoint);
+//        }
+//        if(ImGui::IsMouseClicked(ImGuiMouseButton_Middle))
+//        {
+//            float xProj = (((mouse_pos_in_canvas.x - this->pos.x) / this->size.x ) - 0.5f) * 2.0f;
+//            float yProj = - (((mouse_pos_in_canvas.y - this->pos.y) / this->size.y ) - 0.5f) * 2.0f;
+//
+//            glm::mat4 m = camera->getProjMat() * camera->getViewMat();
+//            float epsilon = 0.05f;
+//
+//            for(auto& point : ApplicationContext::Instance().pointList)
+//            {
+//                glm::vec4 coords = camera->getCameraMat() * glm::vec4(glm::vec3(point.getModelMat() * glm::vec4(0, 0, 0, 1)), 1);
+//
+//                coords.x /= coords.w;
+//                coords.y /= coords.w;
+//
+//                if( std::abs(coords.x - xProj) < epsilon &&
+//                    std::abs(coords.y - yProj) < epsilon
+//                        )
+//                {
+//                    if(point.selected)
+//                    {
+//                        // Change color if needed
+//                        if (point.getColor() != ApplicationContext::Instance().selectedColor)
+//                        {
+//                            point.setColor(ApplicationContext::Instance().selectedColor);
+//                        }
+//                    }
+//                    else
+//                    {
+//                        // Change color if needed
+//                        if (point.getColor() != ApplicationContext::Instance().standardColor)
+//                        {
+//                            point.setColor(ApplicationContext::Instance().standardColor);
+//                        }
+//                    }
+//
+//                    point.selected = !point.selected;
+//
+//                    // Updated mass center
+//                    ApplicationContext::Instance().massCenter->updatedPos(
+//                            ApplicationContext::Instance().torusList,
+//                            ApplicationContext::Instance().pointList
+//                                                                         );
+//                }
+//            }
+//
+//        }
+    }
 }

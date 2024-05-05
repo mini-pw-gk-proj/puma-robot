@@ -98,10 +98,16 @@ void Gui::showSceneWindow() {
     int &i = reinterpret_cast<int &>(appContext.robot->kinematics.animation);
     ImGui::Combo("##combo", &i, items, IM_ARRAYSIZE(items));
 
-    ImGui::SameLine();
     bool animated = appContext.robot->kinematics.movementState == RobotKinematics::AnimatedInverseKinematics;
     fieldModified |= ImGui::Checkbox("Animation", &animated);
     if(fieldModified) appContext.robot->kinematics.movementState = animated? RobotKinematics::AnimatedInverseKinematics: RobotKinematics::FreeAngles;
+
+    ImGui::SameLine();
+    ImGui::Checkbox("On Fire", &appContext.robot->onFire);
+    ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255,100,0,200));
+    ImGui::SameLine();
+    ImGui::Text("(DANGEROUS)");
+    ImGui::PopStyleColor();
 
     // Point Light
     ImGui::SeparatorText("Light");

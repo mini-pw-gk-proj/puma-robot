@@ -18,6 +18,7 @@ class Scene {
     Shader skyboxShader;
     Shader trailShader;
     Shader pointShader;
+    Shader flameShader;
 
     AppContext &appContext;
 
@@ -39,6 +40,11 @@ public:
     void render();
 
 
+    void drawFlames();
+
+    void drawFlamesNormal();
+
+    void drawFlamesMirrored();
 };
 
 

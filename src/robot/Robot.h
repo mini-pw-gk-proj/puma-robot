@@ -22,6 +22,7 @@ class Robot {
 
     Material material{{0.9,0.85,1,1},0.7,0.9};
 public:
+    bool onFire;
     RobotKinematics kinematics;
 
     Robot(Model& standModel, std::vector<Model>& armModels);

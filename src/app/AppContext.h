@@ -17,6 +17,7 @@
 #include "../skybox/Skybox.h"
 #include "../trail/Trail.h"
 #include "../point/Point.h"
+#include "../flame/Flame.h"
 
 
 struct AppContext {
@@ -27,6 +28,7 @@ struct AppContext {
     std::unique_ptr<Skybox> skybox;
     std::unique_ptr<Trail> trail;
     std::unique_ptr<Point> light;
+    std::unique_ptr<Flame> flame;
 
     PointLight pointLight;
     Camera camera;
@@ -60,6 +62,7 @@ struct AppContext {
             skybox = std::make_unique<Skybox>();
             trail = std::make_unique<Trail>(*robot);
             light = std::make_unique<Point>();
+            flame = std::make_unique<Flame>();
         }
 };
 

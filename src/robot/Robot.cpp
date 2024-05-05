@@ -16,6 +16,8 @@ Robot::Robot(Model& standModel, std::vector<Model>& armModels) {
     for(auto &armModel : armModels) {
         armMeshesVolume.emplace_back(armModel.vertices, armModel.triagleAdjacencyIndices, GL_TRIANGLES_ADJACENCY);
     }
+
+    onFire = true;
 }
 
 void Robot::update(float timeS) {

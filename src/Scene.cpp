@@ -12,6 +12,7 @@ Scene::Scene(AppContext &appContext) :
         skyboxShader("../res/shaders/skybox/skybox.vert","../res/shaders/skybox/skybox.frag"),
         trailShader("../res/shaders/trail/trail.vert","../res/shaders/trail/trail.geom", "../res/shaders/trail/trail.frag"),
         pointShader("../res/shaders/point/point.vert","../res/shaders/point/point.frag"),
+        flameShader("../res/shaders/flame/flame.vert", "../res/shaders/flame/flame.geom","../res/shaders/flame/flame.frag"),
         appContext(appContext)
     {}
 
@@ -48,6 +49,8 @@ void Scene::render() {
     glStencilFunc(GL_ALWAYS, 0, 0xFF);
     glDepthFunc(GL_LESS);
 
+    if(appContext.robot->onFire) drawFlamesNormal();
+
     // Skybox
     skyboxShader.use();
     skyboxShader.setUniform("view", appContext.camera.getNoTranslationViewMatrix());
@@ -68,6 +71,34 @@ void Scene::render() {
     appContext.light->render(pointShader);
 
     appContext.frameBufferManager->unbind();
+}
+
+void Scene::drawFlames() {
+    flameShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    flameShader.setUniform("time", (float)glfwGetTime());
+    flameShader.setUniform("screenX", appContext.camera.screenWidth);
+    flameShader.setUniform("noise", 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_1D, appContext.flame->noiseTextureId);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glDepthMask(GL_FALSE);
+    glDisable(GL_CULL_FACE);
+    appContext.robot->renderShadow(flameShader);
+    glDepthMask(GL_TRUE);
+    glEnable(GL_CULL_FACE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void Scene::drawFlamesNormal() {
+    flameShader.use();
+    flameShader.setUniform("view", appContext.camera.getViewMatrix());
+    drawFlames();
+}
+
+void Scene::drawFlamesMirrored() {
+    flameShader.use();
+    flameShader.setUniform("view", appContext.camera.getMirrorViewMatrix());
+    drawFlames();
 }
 
 void Scene::setupShadowedPhong() {
@@ -164,6 +195,7 @@ void Scene::drawMirrorScene (PointLight light)
 
     setupMirrorPhong(light);
     drawSceneNoMirror();
+    if(appContext.robot->onFire) drawFlamesMirrored();
 
     glFrontFace(GL_CCW);
     glStencilFunc(GL_ALWAYS, 0, 0xFF);

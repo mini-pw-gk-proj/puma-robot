@@ -2,16 +2,23 @@
 // Created by Bartek Jadczak on 27/04/2024.
 //
 
+#include <random>
 #include "Cylinder.h"
 
-Cylinder::Cylinder ()
+Cylinder::Cylinder () :
+        columnTexture("../res/textures/column.png")
 {
     auto cylinder = generateCylinder(0.5f, 2, 15);
-    mesh = std::make_unique<Mesh<PositionNormalVertex>>(cylinder.vertices, cylinder.triagleIndices);
-    meshVolume = std::make_unique<Mesh<PositionNormalVertex>>(cylinder.vertices, cylinder.triagleAdjacencyIndices, GL_TRIANGLES_ADJACENCY);
+    mesh = std::make_unique<Mesh<PosNorTexVertex>>(cylinder.vertices, cylinder.triagleIndices);
+    meshVolume = std::make_unique<Mesh<PosNorTexVertex>>(cylinder.vertices, cylinder.triagleAdjacencyIndices, GL_TRIANGLES_ADJACENCY);
+
+
 }
 
 void Cylinder::render (Shader &shader) {
+    shader.setUniform("material.hasTexture", true);
+    shader.setUniform("texture", 0);
+    columnTexture.bind(0);
     shader.setUniform("model", getModel());
     material.setupMaterial(shader);
     mesh->render();
@@ -24,18 +31,20 @@ void Cylinder::renderShadow(Shader &shader) {
 
 glm::mat4 Cylinder::getModel() {
     glm::mat4 model(1.0f);
-    model = glm::scale(model, glm::vec3(2,1,1));
     model = glm::rotate(model, (float)M_PI/2, glm::vec3(0,0,1));
     model = glm::translate(model, glm::vec3{-1.0f, 0.0f, -2.0f});
+    model = glm::scale(model, glm::vec3(1,2,1));
+    model = glm::rotate(model, (float)M_PI, glm::vec3(0,1,0));
     return model;
 }
 
-Model Cylinder::generateCylinder (float radius, float height, int slices) {
-    Model cylinderModel;
-    std::vector<PositionNormalVertex> vertices;
+Model<PosNorTexVertex> Cylinder::generateCylinder (float radius, float height, int slices) {
+    Model<PosNorTexVertex> cylinderModel;
+    std::vector<PosNorTexVertex> vertices;
     std::vector<unsigned int> indices;
 
     // Generate vertices
+    float textureStep = 1.f / static_cast<float>(slices);
     float angleStep = glm::two_pi<float>() / static_cast<float>(slices);
     glm::vec3 topCenter(0.0f, height / 2.0f, 0.0f);
     glm::vec3 bottomCenter(0.0f, -height / 2.0f, 0.0f);
@@ -51,14 +60,15 @@ Model Cylinder::generateCylinder (float radius, float height, int slices) {
     // Generate side vertices
     for (int i = 0; i < slices; ++i) {
         float angle = static_cast<float>(i) * angleStep;
+        float texCoord = static_cast<float>(i) * textureStep;
         float x = radius * std::cos(angle);
         float z = radius * std::sin(angle);
 
         // Top vertex
-        vertices.push_back({glm::vec3(x, height / 2.0f, z), glm::normalize(glm::vec3(x, 0.0f, z))});
+        vertices.push_back({glm::vec3(x, height / 2.0f, z), glm::normalize(glm::vec3(x, 0.0f, z)), glm::vec2(texCoord, 0)});
 
         // Bottom vertex
-        vertices.push_back({glm::vec3(x, -height / 2.0f, z), glm::normalize(glm::vec3(x, 0.0f, z))});
+        vertices.push_back({glm::vec3(x, -height / 2.0f, z), glm::normalize(glm::vec3(x, 0.0f, z)), glm::vec2(texCoord, 1)});
     }
 
     // Generate side vertices for faces
@@ -68,18 +78,18 @@ Model Cylinder::generateCylinder (float radius, float height, int slices) {
         float z = radius * std::sin(angle);
 
         // Top vertex for faces
-        vertices.push_back({glm::vec3(x, height / 2.0f, z), glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f))});
+        vertices.push_back({glm::vec3(x, height / 2.0f, z), glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)), glm::vec2()});
 
         // Bottom vertex for faces
-        vertices.push_back({glm::vec3(x, -height / 2.0f, z), glm::normalize(glm::vec3(0.0f, -1.0f, 0.0f))});
+        vertices.push_back({glm::vec3(x, -height / 2.0f, z), glm::normalize(glm::vec3(0.0f, -1.0f, 0.0f)), glm::vec2()});
     }
 
     // Add middle points
     // Top vertex for faces
-    vertices.push_back({glm::vec3(0, height / 2.0f, 0), glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f))});
+    vertices.push_back({glm::vec3(0, height / 2.0f, 0), glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f)), glm::vec2()});
 
     // Bottom vertex for faces
-    vertices.push_back({glm::vec3(0, -height / 2.0f, 0), glm::normalize(glm::vec3(0.0f, -1.0f, 0.0f))});
+    vertices.push_back({glm::vec3(0, -height / 2.0f, 0), glm::normalize(glm::vec3(0.0f, -1.0f, 0.0f)), glm::vec2()});
 
 
     // Generate indices for the sides

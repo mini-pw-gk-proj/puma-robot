@@ -45,6 +45,14 @@ public:
     void drawFlamesNormal();
 
     void drawFlamesMirrored();
+
+    void drawSkybox();
+
+    void drawTrail();
+
+    void drawPointLight();
+
+    void drawSkyboxMirrored();
 };
 
 

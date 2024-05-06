@@ -7,9 +7,11 @@
 
 #include <vector>
 #include "../mesh/PositionNormalVertex.h"
+#include "../mesh/is_vertex.h"
 
+template<typename TVertex> requires is_vertex<TVertex>
 struct Model {
-    std::vector<PositionNormalVertex> vertices;
+    std::vector<TVertex> vertices;
     std::vector<unsigned int> triagleIndices;
     std::vector<unsigned int> triagleAdjacencyIndices;
 };

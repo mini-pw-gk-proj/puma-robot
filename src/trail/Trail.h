@@ -22,8 +22,10 @@ class Trail {
 public:
     explicit Trail(Robot &robot);
 
-    void update(bool reset);
+    void update(bool shouldReset);
     void render(Shader &shader);
+
+    void reset();
 };
 
 

@@ -8,10 +8,14 @@ Trail::Trail(Robot &robot) : robot(robot) {
     mesh = std::make_unique<Mesh<EmptyVertex>>(Mesh<EmptyVertex>({EmptyVertex()}, {}, GL_POINTS));
 }
 
-void Trail::update(bool reset) {
-    if(reset) {
-        caret = 0;
-        pointCount = 0;
+void Trail::reset() {
+    caret = 0;
+    pointCount = 0;
+}
+
+void Trail::update(bool shouldReset) {
+    if(shouldReset) {
+        reset();
         return;
     }
 

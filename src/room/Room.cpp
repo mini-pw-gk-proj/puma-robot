@@ -6,62 +6,69 @@
 
 Room::Room ()
 {
-    auto room = generateRoom(6, 6, 6);
-    mesh = std::make_unique<Mesh<PositionNormalVertex>>(room.vertices, room.triagleIndices);
+    generateRoom(6, 6, 6);
 }
 
 void Room::render (Shader &shader)
 {
+    shader.setUniform("material.hasTexture", true);
+    shader.setUniform("material.texture", 0);
     material.setupMaterial(shader);
     shader.setUniform("model", glm::mat4(1));
-    mesh->render();
+    if(isTransparent) transparentWallTexture.bind(0);
+    else wallTexture.bind(0);
+    wallsMesh->render();
+    floorTexture.bind(0);
+    floorMesh->render();
+    if(!isTransparent) {
+        ceilingTexture.bind(0);
+        ceilingMesh->render();
+    }
 }
 
-Model Room::generateRoom (float width, float height, float depth)
+void Room::generateRoom (float width, float height, float depth)
 {
-    Model roomModel;
-
-    std::vector<PositionNormalVertex> vertices = {
+    std::vector<PosNorTexVertex> wallVertices = {
             // Front face
-            {glm::vec3(-width / 2, -1, depth / 2), glm::vec3(0.0f, 0.0f, -1.0f)},
-            {glm::vec3(width / 2, -1, depth / 2), glm::vec3(0.0f, 0.0f, -1.0f)},
-            {glm::vec3(width / 2, height-1, depth / 2), glm::vec3(0.0f, 0.0f, -1.0f)},
-            {glm::vec3(-width / 2, height-1, depth / 2), glm::vec3(0.0f, 0.0f, -1.0f)},
+            {glm::vec3(-width / 2, -1, depth / 2),          glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1, 1)},
+            {glm::vec3(width / 2, -1, depth / 2),           glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0, 1)},
+            {glm::vec3(width / 2, height - 1, depth / 2),   glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0, 0)},
+            {glm::vec3(-width / 2, height - 1, depth / 2),  glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1, 0)},
 
             // Back face
-            {glm::vec3(-width / 2, -1, -depth / 2), glm::vec3(0.0f, 0.0f, 1.0f)},
-            {glm::vec3(width / 2, -1, -depth / 2), glm::vec3(0.0f, 0.0f, 1.0f)},
-            {glm::vec3(width / 2, height-1, -depth / 2), glm::vec3(0.0f, 0.0f, 1.0f)},
-            {glm::vec3(-width / 2, height-1, -depth / 2), glm::vec3(0.0f, 0.0f, 1.0f)},
+            {glm::vec3(-width / 2, -1, -depth / 2),         glm::vec3(0.0f, 0.0f, 1.0f),  glm::vec2(0, 1)},
+            {glm::vec3(width / 2, -1, -depth / 2),          glm::vec3(0.0f, 0.0f, 1.0f),  glm::vec2(1, 1)},
+            {glm::vec3(width / 2, height - 1, -depth / 2),  glm::vec3(0.0f, 0.0f, 1.0f),  glm::vec2(1, 0)},
+            {glm::vec3(-width / 2, height - 1, -depth / 2), glm::vec3(0.0f, 0.0f, 1.0f),  glm::vec2(0, 0)},
 
             // Right face
-            {glm::vec3(width / 2, -1, depth / 2), glm::vec3(-1.0f, 0.0f, 0.0f)},
-            {glm::vec3(width / 2, -1, -depth / 2), glm::vec3(-1.0f, 0.0f, 0.0f)},
-            {glm::vec3(width / 2, height-1, -depth / 2), glm::vec3(-1.0f, 0.0f, 0.0f)},
-            {glm::vec3(width / 2, height-1, depth / 2), glm::vec3(-1.0f, 0.0f, 0.0f)},
+            {glm::vec3(width / 2, -1, depth / 2),           glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1, 1)},
+            {glm::vec3(width / 2, -1, -depth / 2),          glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0, 1)},
+            {glm::vec3(width / 2, height - 1, -depth / 2),  glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(0, 0)},
+            {glm::vec3(width / 2, height - 1, depth / 2),   glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2(1, 0)},
 
             // Left face
-            {glm::vec3(-width / 2, -1, depth / 2), glm::vec3(1.0f, 0.0f, 0.0f)},
-            {glm::vec3(-width / 2, -1, -depth / 2), glm::vec3(1.0f, 0.0f, 0.0f)},
-            {glm::vec3(-width / 2, height-1, -depth / 2), glm::vec3(1.0f, 0.0f, 0.0f)},
-            {glm::vec3(-width / 2, height-1, depth / 2), glm::vec3(1.0f, 0.0f, 0.0f)},
-
+            {glm::vec3(-width / 2, -1, depth / 2),          glm::vec3(1.0f, 0.0f, 0.0f),  glm::vec2(0, 1)},
+            {glm::vec3(-width / 2, -1, -depth / 2),         glm::vec3(1.0f, 0.0f, 0.0f),  glm::vec2(1, 1)},
+            {glm::vec3(-width / 2, height - 1, -depth / 2), glm::vec3(1.0f, 0.0f, 0.0f),  glm::vec2(1, 0)},
+            {glm::vec3(-width / 2, height - 1, depth / 2),  glm::vec3(1.0f, 0.0f, 0.0f),  glm::vec2(0, 0)},
+    };
+    std::vector<PosNorTexVertex> ceilingVertices = {
             // Top face
-            {glm::vec3(-width / 2, height-1, depth / 2), glm::vec3(0.0f, -1.0f, 0.0f)},
-            {glm::vec3(width / 2, height-1, depth / 2), glm::vec3(0.0f, -1.0f, 0.0f)},
-            {glm::vec3(width / 2, height-1, -depth / 2), glm::vec3(0.0f, -1.0f, 0.0f)},
-            {glm::vec3(-width / 2, height-1, -depth / 2), glm::vec3(0.0f, -1.0f, 0.0f)},
-
+            {glm::vec3(-width / 2, height - 1, depth / 2),  glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0, 0)},
+            {glm::vec3(width / 2, height - 1, depth / 2),   glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1, 0)},
+            {glm::vec3(width / 2, height - 1, -depth / 2),  glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(1, 1)},
+            {glm::vec3(-width / 2, height - 1, -depth / 2), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec2(0, 1)},
+    };
+    std::vector<PosNorTexVertex> floorVertices = {
             // Bottom face
-            {glm::vec3(-width / 2, -1, depth / 2), glm::vec3(0.0f, 1.0f, 0.0f)},
-            {glm::vec3(width / 2, -1, depth / 2), glm::vec3(0.0f, 1.0f, 0.0f)},
-            {glm::vec3(width / 2, -1, -depth / 2), glm::vec3(0.0f, 1.0f, 0.0f)},
-            {glm::vec3(-width / 2, -1, -depth / 2), glm::vec3(0.0f, 1.0f, 0.0f)},
-
-
+            {glm::vec3(-width / 2, -1, depth / 2), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0, 1)},
+            {glm::vec3(width / 2, -1, depth / 2), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1, 1)},
+            {glm::vec3(width / 2, -1, -depth / 2), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1, 0)},
+            {glm::vec3(-width / 2, -1, -depth / 2), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0, 0)},
     };
 
-    std::vector<unsigned int> triangleIndices = {
+    std::vector<unsigned int> wallIndices = {
             // Front face
             0, 2, 1,
             2, 0, 3,
@@ -77,21 +84,20 @@ Model Room::generateRoom (float width, float height, float depth)
             // Left face
             12, 13, 14,
             14, 15, 12,
-
+    };
+    std::vector<unsigned int> ceilingIndices = {
             // Top face
-            16, 18, 17,
-            18, 16, 19,
-
+            0, 2, 1,
+            2, 0, 3,
+    };
+    std::vector<unsigned int> floorIndices = {
             // Bottom face
-            20, 21, 22,
-            22, 23, 20,
-
-            // Define other faces similarly...
+            0, 1, 2,
+            2, 3, 0,
     };
 
     // Assign vertices and indices to the model
-    roomModel.vertices = vertices;
-    roomModel.triagleIndices = triangleIndices;
-
-    return roomModel;
+    wallsMesh = std::make_unique<Mesh<PosNorTexVertex>>(wallVertices, wallIndices);
+    ceilingMesh = std::make_unique<Mesh<PosNorTexVertex>>(ceilingVertices, ceilingIndices);
+    floorMesh = std::make_unique<Mesh<PosNorTexVertex>>(floorVertices, floorIndices);
 }

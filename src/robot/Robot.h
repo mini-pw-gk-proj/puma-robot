@@ -12,20 +12,21 @@
 #include "../importer/Model.h"
 #include "RobotKinematics.h"
 #include "../material/Material.h"
+#include "../mesh/PosNorTexVertex.h"
 
 class Robot {
-    std::unique_ptr<Mesh<PositionNormalVertex>> standMesh;
-    std::vector<Mesh<PositionNormalVertex>> armMeshes;
+    std::unique_ptr<Mesh<PosNorTexVertex>> standMesh;
+    std::vector<Mesh<PosNorTexVertex>> armMeshes;
 
-    std::unique_ptr<Mesh<PositionNormalVertex>> standMeshVolume;
-    std::vector<Mesh<PositionNormalVertex>> armMeshesVolume;
+    std::unique_ptr<Mesh<PosNorTexVertex>> standMeshVolume;
+    std::vector<Mesh<PosNorTexVertex>> armMeshesVolume;
 
-    Material material{{0.9,0.85,1,1},0.7,0.9};
+    Material material{{0.15,0.15,0.3,1},0.7,0.9};
 public:
     bool onFire;
     RobotKinematics kinematics;
 
-    Robot(Model& standModel, std::vector<Model>& armModels);
+    Robot(Model<PosNorTexVertex>& standModel, std::vector<Model<PosNorTexVertex>>& armModels);
 
     void update(float timeS);
     void render(Shader &shader);

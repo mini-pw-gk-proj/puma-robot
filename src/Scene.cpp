@@ -28,13 +28,15 @@ void Scene::update() {
 void Scene::render() {
     appContext.frameBufferManager->bind();
 
+    drawSkybox();
+
     // Mirror world
     setupPhong(appContext.pointLight);
     drawMirrorScene(appContext.pointLight);
 
     // Render scene
     auto t = appContext.pointLight;
-    t.strength = 0.25; // Let a little bit of light in the shadows.
+    t.strength = 0.15; // Let a little bit of light in the shadows.
     setupPhong(t);
     drawSceneOnlyMirrorFront();
     drawSceneOnlyMirrorBack();
@@ -51,30 +53,45 @@ void Scene::render() {
 
     if(appContext.robot->onFire) drawFlamesNormal();
 
-    // Skybox
+    drawTrail();
+    drawPointLight();
+
+    appContext.frameBufferManager->unbind();
+}
+
+void Scene::drawPointLight() {
+    pointShader.use();
+    pointShader.setUniform("view", appContext.camera.getViewMatrix());
+    pointShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    appContext.light->render(pointShader);
+}
+
+void Scene::drawTrail() {
+    trailShader.use();
+    trailShader.setUniform("view", appContext.camera.getViewMatrix());
+    trailShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    appContext.trail->render(trailShader);
+}
+
+void Scene::drawSkybox() {
     skyboxShader.use();
     skyboxShader.setUniform("view", appContext.camera.getNoTranslationViewMatrix());
     skyboxShader.setUniform("projection", appContext.camera.getProjectionMatrix());
     skyboxShader.setUniform("skybox", 0);
     appContext.skybox->render();
+}
 
-    // Trail
-    trailShader.use();
-    trailShader.setUniform("view", appContext.camera.getViewMatrix());
-    trailShader.setUniform("projection", appContext.camera.getProjectionMatrix());
-    appContext.trail->render(trailShader);
-
-    // Point
-    pointShader.use();
-    pointShader.setUniform("view", appContext.camera.getViewMatrix());
-    pointShader.setUniform("projection", appContext.camera.getProjectionMatrix());
-    appContext.light->render(pointShader);
-
-    appContext.frameBufferManager->unbind();
+void Scene::drawSkyboxMirrored() {
+    skyboxShader.use();
+    skyboxShader.setUniform("view", glm::mat4(glm::mat3(appContext.camera.getMirrorViewMatrix())));
+    skyboxShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    skyboxShader.setUniform("skybox", 0);
+    appContext.skybox->render();
 }
 
 void Scene::drawFlames() {
     flameShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    flameShader.setUniform("viewPos", appContext.camera.getViewPosition());
     flameShader.setUniform("time", (float)glfwGetTime());
     flameShader.setUniform("screenX", appContext.camera.screenWidth);
     flameShader.setUniform("noise", 0);
@@ -193,6 +210,7 @@ void Scene::drawMirrorScene (PointLight light)
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glFrontFace(GL_CW);
 
+    drawSkyboxMirrored();
     setupMirrorPhong(light);
     drawSceneNoMirror();
     if(appContext.robot->onFire) drawFlamesMirrored();

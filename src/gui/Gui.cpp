@@ -96,11 +96,17 @@ void Gui::showSceneWindow() {
 
     const char* items[] = { "Pi", "Infinity", "Chaotic", "Circle"};
     int &i = reinterpret_cast<int &>(appContext.robot->kinematics.animation);
-    ImGui::Combo("##combo", &i, items, IM_ARRAYSIZE(items));
+    fieldModified |= ImGui::Combo("##combo", &i, items, IM_ARRAYSIZE(items));
+    if(fieldModified)
+        appContext.trail->reset();
 
     bool animated = appContext.robot->kinematics.movementState == RobotKinematics::AnimatedInverseKinematics;
     fieldModified |= ImGui::Checkbox("Animation", &animated);
-    if(fieldModified) appContext.robot->kinematics.movementState = animated? RobotKinematics::AnimatedInverseKinematics: RobotKinematics::FreeAngles;
+    if(fieldModified) {
+        appContext.robot->kinematics.movementState = animated ? RobotKinematics::AnimatedInverseKinematics
+                                                              : RobotKinematics::FreeAngles;
+        appContext.trail->reset();
+    }
 
     ImGui::SameLine();
     ImGui::Checkbox("On Fire", &appContext.robot->onFire);
@@ -108,11 +114,21 @@ void Gui::showSceneWindow() {
     ImGui::SameLine();
     ImGui::Text("(DANGEROUS)");
     ImGui::PopStyleColor();
+    ImGui::SameLine();
+    ImGui::Checkbox("Transp. wall", &appContext.room->isTransparent);
 
     // Point Light
     ImGui::SeparatorText("Light");
 
-    ImGui::DragFloat3("Light position", glm::value_ptr(appContext.pointLight.position), 0.02f);
+    float *position = glm::value_ptr(appContext.pointLight.position);
+    ImGui::DragFloat3("Light position", position, 0.02f);
+    if(position[0] < -3) position[0] = -3;
+    if(position[0] > 3) position[0] = 3;
+    if(position[1] < -1) position[1] = -1;
+    if(position[1] > 5) position[1] = 5;
+    if(position[2] < -3) position[2] = -3;
+    if(position[2] > 3) position[2] = 3;
+    appContext.pointLight.position = glm::vec3(position[0], position[1], position[2]);
 
     const char* itemsL[] = { "40W Tungsten", "100W Tungsten", "Halogen" , "Carbon Arc"};
     const std::map<int, glm::vec3> lights {

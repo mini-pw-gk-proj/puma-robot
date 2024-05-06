@@ -1,13 +1,17 @@
 #version 330 core
 out vec4 fragColor;
 
-in vec3 normal;
 in vec3 fragPos;
+in vec3 normal;
+in vec2 texCoords;
 
 uniform vec3 viewPos;
 
 // Material
 struct Material {
+    bool hasTexture;
+    sampler2D texture;
+
     vec4 albedo;
     float metallic;
     float roughness;
@@ -64,7 +68,7 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {
 }
 
 void main() {
-    vec4 albedo = material.albedo;
+    vec4 albedo = material.hasTexture ? texture(material.texture, texCoords) : material.albedo;
     float metallic  = material.metallic;
     float roughness =  material.roughness;
 
@@ -100,6 +104,7 @@ void main() {
 
     vec3 ambient = vec3(0.1) * albedo.rgb;
     vec3 color   = ambient + Lo;
-
+    float gamma = 2.2f;
+    color =  pow(color, vec3(1.0/gamma));
     fragColor = vec4(color, albedo.w);
 }

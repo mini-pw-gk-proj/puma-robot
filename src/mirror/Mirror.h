@@ -10,19 +10,20 @@
 #include "../mesh/PositionNormalVertex.h"
 #include "../importer/Model.h"
 #include "../material/Material.h"
+#include "../mesh/PosNorTexVertex.h"
 
 class Mirror
 {
-    std::unique_ptr<Mesh<PositionNormalVertex>> meshFront;
-    std::unique_ptr<Mesh<PositionNormalVertex>> meshBack;
-    std::unique_ptr<Mesh<PositionNormalVertex>> meshVolume;
+    std::unique_ptr<Mesh<PosNorTexVertex>> meshFront;
+    std::unique_ptr<Mesh<PosNorTexVertex>> meshBack;
+    std::unique_ptr<Mesh<PosNorTexVertex>> meshVolume;
 
-    Material material{{113/256.f, 121/256.f, 126/256.f,1},0.2,0.5};
+    Material material{{0.25*113/256.f, 0.25*121/256.f, 0.5*166/256.f,1},0.2,0.5};
     Material transparentMaterial{{113/256.f, 121/256.f, 126/256.f, 0.6},0.2,0.5};
 
-    static Model generateMirrorPlane();
-    static Model generateMirrorPlaneFront();
-    static Model generateMirrorPlaneBack();
+    static Model<PosNorTexVertex> generateMirrorPlane();
+    static Model<PosNorTexVertex> generateMirrorPlaneFront();
+    static Model<PosNorTexVertex> generateMirrorPlaneBack();
 
 public:
 

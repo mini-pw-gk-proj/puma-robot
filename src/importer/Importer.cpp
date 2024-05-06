@@ -7,13 +7,13 @@
 #include <sstream>
 #include "Importer.h"
 
-Model Importer::loadModel(const std::string &path) {
-    Model model;
+Model<PosNorTexVertex> Importer::loadModel(const std::string &path) {
+    Model<PosNorTexVertex> model;
 
     auto rawModel = loadRawModel(path);
 
     for(auto &normal : rawModel.normals) {
-        model.vertices.push_back({rawModel.uniqueVertices[normal.uniqueVertexId], normal.normal});
+        model.vertices.push_back({rawModel.uniqueVertices[normal.uniqueVertexId], normal.normal, glm::vec2()});
     }
     model.triagleIndices.reserve(3 * rawModel.triangles.size());
     for(auto &triangle : rawModel.triangles) {

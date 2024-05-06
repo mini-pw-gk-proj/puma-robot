@@ -4,16 +4,16 @@
 
 #include "Mirror.h"
 
-Model Mirror::generateMirrorPlaneFront ()
+Model<PosNorTexVertex> Mirror::generateMirrorPlaneFront ()
 {
-    Model mirrorModel;
+    Model<PosNorTexVertex> mirrorModel;
 
-    std::vector<PositionNormalVertex> vertices = {
+    std::vector<PosNorTexVertex> vertices = {
             // Front face
-            {glm::vec3(0, -0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, -0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, +0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, +0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f)},
+            {glm::vec3(0, -0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, -0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, +0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, +0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
 
     };
 
@@ -31,16 +31,16 @@ Model Mirror::generateMirrorPlaneFront ()
 }
 
 
-Model Mirror::generateMirrorPlaneBack ()
+Model<PosNorTexVertex> Mirror::generateMirrorPlaneBack ()
 {
-    Model mirrorModel;
+    Model<PosNorTexVertex> mirrorModel;
 
-    std::vector<PositionNormalVertex> vertices = {
+    std::vector<PosNorTexVertex> vertices = {
             // Back face
-            {glm::vec3(0, -0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, -0.5f, +0.5f), glm::vec3(-1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, +0.5f, +0.5f), glm::vec3(-1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, +0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f)},
+            {glm::vec3(0, -0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, -0.5f, +0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, +0.5f, +0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, +0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2()},
 
     };
 
@@ -57,22 +57,22 @@ Model Mirror::generateMirrorPlaneBack ()
     return mirrorModel;
 }
 
-Model Mirror::generateMirrorPlane ()
+Model<PosNorTexVertex> Mirror::generateMirrorPlane ()
 {
-    Model mirrorModel;
+    Model<PosNorTexVertex> mirrorModel;
 
-    std::vector<PositionNormalVertex> vertices = {
+    std::vector<PosNorTexVertex> vertices = {
             // Front face
-            {glm::vec3(0, -0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, -0.5f, +0.5f), glm::vec3(-1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, +0.5f, +0.5f), glm::vec3(-1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, +0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f)},
+            {glm::vec3(0, -0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, -0.5f, +0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, +0.5f, +0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, +0.5f, -0.5f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec2()},
 
             // Back face
-            {glm::vec3(0, -0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, -0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, +0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f)},
-            {glm::vec3(0, +0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f)},
+            {glm::vec3(0, -0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, -0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, +0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, +0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
 
     };
 
@@ -107,17 +107,18 @@ Model Mirror::generateMirrorPlane ()
 Mirror::Mirror ()
 {
     auto mirrorFront = generateMirrorPlaneFront();
-    meshFront = std::make_unique<Mesh<PositionNormalVertex>>(mirrorFront.vertices, mirrorFront.triagleIndices);
+    meshFront = std::make_unique<Mesh<PosNorTexVertex>>(mirrorFront.vertices, mirrorFront.triagleIndices);
 
     auto mirrorBack = generateMirrorPlaneBack();
-    meshBack = std::make_unique<Mesh<PositionNormalVertex>>(mirrorBack.vertices, mirrorBack.triagleIndices);
+    meshBack = std::make_unique<Mesh<PosNorTexVertex>>(mirrorBack.vertices, mirrorBack.triagleIndices);
 
     auto mirror = generateMirrorPlane();
-    meshVolume = std::make_unique<Mesh<PositionNormalVertex>>(mirror.vertices, mirror.triagleAdjacencyIndices, GL_TRIANGLES_ADJACENCY);
+    meshVolume = std::make_unique<Mesh<PosNorTexVertex>>(mirror.vertices, mirror.triagleAdjacencyIndices, GL_TRIANGLES_ADJACENCY);
 }
 
 void Mirror::render (Shader &shader)
 {
+    shader.setUniform("material.hasTexture", false);
     shader.setUniform("model", getModel());
     material.setupMaterial(shader);
     meshBack->render();
@@ -132,6 +133,7 @@ void Mirror::renderShadow(Shader &shader) {
 
 void Mirror::renderBack (Shader &shader)
 {
+    shader.setUniform("material.hasTexture", false);
     material.setupMaterial(shader);
     shader.setUniform("model", getModel());
     meshBack->render();
@@ -139,6 +141,7 @@ void Mirror::renderBack (Shader &shader)
 
 void Mirror::renderFront (Shader &shader)
 {
+    shader.setUniform("material.hasTexture", false);
     transparentMaterial.setupMaterial(shader);
     shader.setUniform("model", getModel());
     meshFront->render();

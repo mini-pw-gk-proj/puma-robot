@@ -51,7 +51,7 @@ struct AppContext {
             frameBufferManager->create_buffers(camera.screenWidth, camera.screenHeight);
 
             auto standModel = Importer::loadModel("../res/models/mesh1.txt");
-            std::vector<Model> armModels;
+            std::vector<Model<PosNorTexVertex>> armModels;
             armModels.reserve(5);
             for(int i = 0; i < 5; i++)
                 armModels.push_back(Importer::loadModel("../res/models/mesh" + std::to_string(i+2) + ".txt"));

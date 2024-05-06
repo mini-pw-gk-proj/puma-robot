@@ -77,6 +77,10 @@ set(APP_SRC
         src/point/Point.h
         src/flame/Flame.cpp
         src/flame/Flame.h
+        src/mesh/PosNorTexVertex.h
+        dep/inc/stb/stb_image.h
+        src/texture/Texture.cpp
+        src/texture/Texture.h
 )
 
 # Include directories

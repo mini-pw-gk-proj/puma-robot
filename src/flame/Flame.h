@@ -7,7 +7,7 @@
 
 
 class Flame {
-    const static unsigned int TEXTURE_SIZE = 200;
+    const static unsigned int TEXTURE_SIZE = 50;
 public:
     unsigned int noiseTextureId;
 

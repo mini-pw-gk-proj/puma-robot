@@ -11,6 +11,7 @@ flat out float flame;
 
 uniform mat4 projection;
 uniform mat4 view;
+uniform vec3 viewPos;
 uniform float time;
 
 bool isTriangleFacingDown(int i1, int i2, int i3);
@@ -42,8 +43,9 @@ void main()
 void emitVertex(int i, bool extrude, int adj) {
     vec3 up = vec3(0,1,0);
     vec3 vector = normalize(up);
-    vec4 offset = !extrude ? vec4(vector*0.4 + vec3(0.01*sin(5.23*time) + 0.015*cos(10.23*time) + 0.0075*sin(34.2*time),0, 0.01*cos(15.01*time)) + 0.015*sin(7.34*time)+ 0.0065*sin(27.2*time), 0) : vec4(0);
-    offset += vec4(vertex[i].normal*0.001, 0);
+    vec4 offset = !extrude ? vec4(vector*0.4 + vec3(0.02*sin(5.23*time) + 0.03*cos(10.23*time) + 0.015*sin(34.2*time),0, 0.02*cos(15.01*time)) + 0.03*sin(7.34*time)+ 0.013*sin(27.2*time), 0) : vec4(0);
+    float distanceToCamera = length(view * (vec4(viewPos,1) - (gl_in[i].gl_Position + offset)));
+    offset += vec4(vertex[i].normal*0.0002*pow(distanceToCamera,1.5), 0);
     vec4 position = gl_in[i].gl_Position + offset;
     gl_Position = projection * view * position;
     EmitVertex();

@@ -13,7 +13,8 @@ Flame::Flame() {
 
     float arr[TEXTURE_SIZE];
     std::mt19937 prng(std::random_device{}());
-    std::uniform_real_distribution<float> dist(0.5, 1);
+    std::chi_squared_distribution<float> dist(3);
+//    std::uniform_real_distribution<float> dist(0.0, 1);
     for(int i = 0; i < TEXTURE_SIZE; i++)
         arr[i] = dist(prng);
 

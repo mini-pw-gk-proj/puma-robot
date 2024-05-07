@@ -66,9 +66,9 @@ void Scene::render() {
 
 void Scene::drawSparks() {
     sparkShader.use();
-    sparkShader.setUniform("view", appContext.camera.getViewMatrix());
-    sparkShader.setUniform("projection", appContext.camera.getProjectionMatrix());
-    sparkShader.setUniform("viewPos", appContext.camera.getViewPosition());
+    sparkShader.setUniform("view", appContext.camera->getViewMatrix());
+    sparkShader.setUniform("projection", appContext.camera->getProjectionMatrix());
+    sparkShader.setUniform("viewPos", appContext.camera->getViewPosition());
     appContext.sparks->render(sparkShader);
 }
 
@@ -226,7 +226,7 @@ void Scene::drawMirrorScene (PointLight light)
 
     drawSkyboxMirrored();
     setupMirrorPhong(light);
-    drawSceneNoMirror(appContext.camera.getViewPosition().z > -1);
+    drawSceneNoMirror(appContext.camera->getViewPosition().z > -1);
     if(appContext.robot->onFire) drawFlamesMirrored();
 
     glFrontFace(GL_CCW);

@@ -11,7 +11,7 @@ struct Spark {
     glm::vec3 prevPos;
     glm::vec3 currPos;
     glm::vec3 velocity;
-    float age;
+    float ttl;
 };
 
 #endif //PUMAROBOT_SPARK_H

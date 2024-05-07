@@ -19,6 +19,7 @@ class SparkGenerator {
     constexpr static float MAX_VELOCITY = 2;
 
     Robot &robot;
+    float prevTime{};
 public:
     explicit SparkGenerator(Robot &robot) : robot(robot) {}
 

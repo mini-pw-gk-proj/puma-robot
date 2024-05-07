@@ -7,13 +7,19 @@
 
 
 #include "SparkGenerator.h"
+#include "../mesh/SparkVertex.h"
 
 class SparksEntity {
+    Mesh<SparkVertex> mesh;
     SparkGenerator sparkGenerator;
 
 public:
+    explicit SparksEntity(Robot &robot) :
+        mesh({}, {}, GL_POINTS),
+        sparkGenerator(robot) {}
+
     void update();
-    void render();
+    void render(Shader &shader);
 };
 
 

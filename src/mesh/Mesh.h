@@ -32,7 +32,7 @@ public:
         glBindVertexArray(0);
     }
 
-    void update(std::vector<TVertex> &&newVertices, std::optional<std::vector<unsigned int>> &&newIndices) {
+    void update(std::vector<TVertex> &&newVertices, std::optional<std::vector<unsigned int>> &&newIndices = {}) {
         vertices = std::move(newVertices);
         indices = std::move(newIndices);
 

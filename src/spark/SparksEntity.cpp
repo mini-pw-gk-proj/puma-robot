@@ -6,10 +6,15 @@
 
 void SparksEntity::update() {
     sparkGenerator.update();
-    // TODO: Convert sparks to a TVertex type and update mesh.
-    // A novel one. PosTanVertex maybe as we need position and the velocity vectors.
+    std::vector<SparkVertex> vertices(sparkGenerator.sparks.size());
+    std::transform(sparkGenerator.sparks.begin(), sparkGenerator.sparks.end(), vertices.begin(),
+                   [&](const auto &spark) {
+        return SparkVertex{spark.prevPos, spark.currPos, glm::normalize(spark.velocity)};
+    });
+    mesh.update(std::move(vertices));
 }
 
-void SparksEntity::render() {
+void SparksEntity::render(Shader &shader) {
     // TODO: Draw billboards.
+    mesh.render();
 }

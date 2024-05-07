@@ -86,6 +86,7 @@ set(APP_SRC
         src/spark/Spark.h
         src/spark/SparksEntity.cpp
         src/spark/SparksEntity.h
+        src/mesh/SparkVertex.h
 )
 
 # Include directories

@@ -6,16 +6,22 @@
 
 void SparkGenerator::update() {
     // WIP
-    if(sparks.empty()) sparks.push_back(Spark{
-        {},
-        robot.kinematics.needlePosition,
-        -robot.kinematics.needleOrientation,
-        5});
-    sparks[0].ttl -= glfwGetTime();
-    if(sparks[0].ttl < 0) sparks.pop_back();
-    sparks[0].velocity += glm::vec3(0, -9.81, 0);
-    sparks[0].prevPos = sparks[0].currPos;
-    sparks[0].currPos += sparks[0].velocity;
+    if(sparks.size() < MAX_SPARKS)
+        sparks.push_back(Spark{
+                {},
+                robot.kinematics.needlePosition,
+                robot.kinematics.needleOrientation*0.1f,
+                0.1});
+    for(auto &spark : sparks) {
+        spark.ttl -= glfwGetTime() - prevTime;
+        prevTime = glfwGetTime();
+        spark.prevPos = spark.currPos;
+        spark.currPos += spark.velocity;
+        spark.velocity += glm::vec3(0, -9.81, 0)*0.001f;
+    }
+    sparks.erase(std::remove_if(sparks.begin(), sparks.end(), [&](const auto &item) {
+        return item.ttl < 0;
+    }), sparks.end());
 
     // TODO: Implement
     // Kill aged sparks.

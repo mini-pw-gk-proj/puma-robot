@@ -13,6 +13,7 @@ Scene::Scene(AppContext &appContext) :
         trailShader("../res/shaders/trail/trail.vert","../res/shaders/trail/trail.geom", "../res/shaders/trail/trail.frag"),
         pointShader("../res/shaders/point/point.vert","../res/shaders/point/point.frag"),
         flameShader("../res/shaders/flame/flame.vert", "../res/shaders/flame/flame.geom","../res/shaders/flame/flame.frag"),
+        sparkShader("../res/shaders/spark/spark.vert", "../res/shaders/spark/spark.geom","../res/shaders/spark/spark.frag"),
         appContext(appContext)
     {}
 
@@ -20,9 +21,12 @@ void Scene::update() {
     auto timeS = float(glfwGetTime());
 
     appContext.robot->update(timeS);
+
     appContext.trail->update(appContext.robot->kinematics.movementState != RobotKinematics::AnimatedInverseKinematics);
     appContext.light->updateColor(glm::vec4(appContext.pointLight.color, 1.0f));
     appContext.light->updatePosition(appContext.pointLight.position);
+
+    appContext.sparks->update();
 }
 
 void Scene::render() {
@@ -55,8 +59,16 @@ void Scene::render() {
 
     drawTrail();
     drawPointLight();
+    if(appContext.robot->kinematics.movementState == RobotKinematics::AnimatedInverseKinematics) drawSparks();
 
     appContext.frameBufferManager->unbind();
+}
+
+void Scene::drawSparks() {
+    sparkShader.use();
+    sparkShader.setUniform("view", appContext.camera.getViewMatrix());
+    sparkShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    appContext.sparks->render(sparkShader);
 }
 
 void Scene::drawPointLight() {

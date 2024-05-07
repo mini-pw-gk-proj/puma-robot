@@ -145,4 +145,6 @@ RobotKinematics::RobotKinematics() {
     needlePosition = startingNeedlePosition;
     needleOrientation = startingNeedleOrientation;
     movementState = FreeAngles;
+
+    updateNeedle();
 }

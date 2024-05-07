@@ -8,9 +8,11 @@
 
 #include "SparkGenerator.h"
 #include "../mesh/SparkVertex.h"
+#include "../texture/Texture.h"
 
 class SparksEntity {
     Mesh<SparkVertex> mesh;
+    Texture texture{"../res/textures/drop.png"};
     SparkGenerator sparkGenerator;
 
 public:

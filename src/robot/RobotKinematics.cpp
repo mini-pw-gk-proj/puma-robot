@@ -72,7 +72,7 @@ void RobotKinematics::updateAnimation(float timeS) {
             break;
         }
         case Pi: {
-            double speed = 1;
+            double speed = 0.75;
             y = -0.0035 * piShape.getX(0, timeS * speed, 0);
             x = -0.0035 * piShape.getY(-50, (timeS * speed), M_PI / 2);
             break;

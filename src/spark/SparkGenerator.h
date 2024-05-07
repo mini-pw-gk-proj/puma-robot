@@ -13,14 +13,12 @@
 
 class SparkGenerator {
     // TODO: Could be extracted to GUI
-    constexpr static int MAX_SPARKS = 100;
-    constexpr static float MAX_TTL = 2;
-    constexpr static float MAX_ANGLE = M_PI/2;
-    constexpr static float MAX_VELOCITY = 2;
+    constexpr static int MAX_SPARKS = 200;
 
     Robot &robot;
     float prevTime{};
 public:
+    constexpr static float MAX_TTL = 1;
     explicit SparkGenerator(Robot &robot) : robot(robot) {}
 
     std::vector<Spark> sparks;

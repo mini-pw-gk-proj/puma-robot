@@ -68,6 +68,7 @@ void Scene::drawSparks() {
     sparkShader.use();
     sparkShader.setUniform("view", appContext.camera.getViewMatrix());
     sparkShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    sparkShader.setUniform("viewPos", appContext.camera.getViewPosition());
     appContext.sparks->render(sparkShader);
 }
 

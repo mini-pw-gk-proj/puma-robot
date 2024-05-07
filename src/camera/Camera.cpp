@@ -14,8 +14,10 @@ Camera::Camera(int screenWidth, int screenHeight, CameraMode cameraMode, glm::ve
                                         movementSpeed(SPEED),
                                         mouseSensitivity(SENSITIVITY), zoomSensitivity(ZOOM_SENSITIVITY), position(position),
                                         anchor(anchor), nearPlane(0.01),
-                                        farPlane(100), fov(45.f),
-                                        screenWidth(screenWidth), screenHeight(screenHeight) {
+                                        farPlane(100), fov(45.f)
+                                        {
+    BaseCamera::screenWidth = screenWidth;
+    BaseCamera::screenHeight = screenHeight;
     // TODO Set orientation to anchor
     updateDirections();
 }

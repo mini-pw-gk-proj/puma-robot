@@ -11,26 +11,15 @@
 
 #include <vector>
 #include <map>
+#include "baseCamera.h"
 
 enum CameraMode {
     FREE,
     ANCHOR
 };
 
-// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
-enum CameraMovement {
-    FORWARD,
-    BACKWARD,
-    LEFT,
-    RIGHT
-};
 
-// Default camera values
-const float SPEED = 2.5f;
-const float SENSITIVITY = 0.01f;
-const float ZOOM_SENSITIVITY = 0.1f;
-
-class Camera {
+class Camera : public BaseCamera {
 private:
     CameraMode cameraType;
 
@@ -72,20 +61,17 @@ public:
             glm::quat orientation = glm::quat(1, 0, 0, 0)
     );
 
-    [[nodiscard]] glm::mat4 getViewMatrix() const;
-    [[nodiscard]] glm::mat4 getNoTranslationViewMatrix() const;
-    [[nodiscard]] glm::mat4 getMirrorViewMatrix() const;
-    [[nodiscard]] glm::mat4 getProjectionMatrix() const;
-    [[nodiscard]] glm::vec3 getViewPosition() const;
+    [[nodiscard]] glm::mat4 getViewMatrix() const override;
+    [[nodiscard]] glm::mat4 getNoTranslationViewMatrix() const override;
+    [[nodiscard]] glm::mat4 getMirrorViewMatrix() const override;
+    [[nodiscard]] glm::mat4 getProjectionMatrix() const override;
+    [[nodiscard]] glm::vec3 getViewPosition() const override;
 
-    void processKeyboard(CameraMovement direction, float deltaTime);
-    void processMouseMovement(float xoffset, float yoffset);
-    void processMouseScroll(float yoffset);
+    void processKeyboard(CameraMovement direction, float deltaTime) override;
+    void processMouseMovement(float xoffset, float yoffset) override;
+    void processMouseScroll(float yoffset) override;
 
-    void resize(int screenWidth, int screenHeight);
-
-    int screenWidth;
-    int screenHeight;
+    void resize(int screenWidth, int screenHeight) override;
 
 private:
 

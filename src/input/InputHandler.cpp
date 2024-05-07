@@ -40,13 +40,13 @@ void InputHandler::keyCallback(GLFWwindow *window, int key, int scancode, int ac
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
     if (key == GLFW_KEY_W && action == GLFW_PRESS)
-        appContext.camera.processKeyboard(FORWARD, deltaTime);
+        appContext.camera->processKeyboard(FORWARD, deltaTime);
     if (key == GLFW_KEY_S && action == GLFW_PRESS)
-        appContext.camera.processKeyboard(BACKWARD, deltaTime);
+        appContext.camera->processKeyboard(BACKWARD, deltaTime);
     if (key == GLFW_KEY_A && action == GLFW_PRESS)
-        appContext.camera.processKeyboard(LEFT, deltaTime);
+        appContext.camera->processKeyboard(LEFT, deltaTime);
     if (key == GLFW_KEY_D && action == GLFW_PRESS)
-        appContext.camera.processKeyboard(RIGHT, deltaTime);
+        appContext.camera->processKeyboard(RIGHT, deltaTime);
 }
 
 void InputHandler::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
@@ -80,7 +80,7 @@ void InputHandler::mouseCallback(GLFWwindow *window, double xposIn, double yposI
     lastY = ypos;
 
     if (!appContext.guiFocus) {
-        appContext.camera.processMouseMovement(xoffset, yoffset);
+        appContext.camera->processMouseMovement(xoffset, yoffset);
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     } else glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
@@ -90,7 +90,7 @@ void InputHandler::mouseCallback(GLFWwindow *window, double xposIn, double yposI
 void InputHandler::scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
     // TODO: Reimplement handling of input to use imGUI
     //if (ImGui::GetIO().WantCaptureMouse) return;
-    appContext.camera.processMouseScroll(static_cast<float>(yoffset));
+    appContext.camera->processMouseScroll(static_cast<float>(yoffset));
 }
 
 void InputHandler::windowResize (GLFWwindow *window, int width, int height)

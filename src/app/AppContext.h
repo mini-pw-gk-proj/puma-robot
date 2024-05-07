@@ -31,7 +31,7 @@ struct AppContext {
     std::unique_ptr<Flame> flame;
 
     PointLight pointLight;
-    Camera camera;
+    std::unique_ptr<BaseCamera> camera;
 
     std::unique_ptr<FrameBufferManager> frameBufferManager;
 
@@ -39,16 +39,16 @@ struct AppContext {
 
     void glfw_window_resize(unsigned int width, unsigned int height)
     {
-        camera.resize(width, height); // NOLINT(*-narrowing-conversions)
-        frameBufferManager->create_buffers(camera.screenWidth, camera.screenHeight);
+        camera->resize(width, height); // NOLINT(*-narrowing-conversions)
+        frameBufferManager->create_buffers(camera->screenWidth, camera->screenHeight);
     }
 
     AppContext() : // TODO Remove fixed screen resolution
-        camera(1920, 1080, CameraMode::ANCHOR, glm::vec3(0.0f, 3.0f, 3.0f), glm::vec3(0.f), glm::vec3(-M_PI/4,0,0)),
         frameBufferManager()
         {
+            camera = std::make_unique<Camera>(1920, 1080, CameraMode::ANCHOR, glm::vec3(0.0f, 3.0f, 3.0f), glm::vec3(0.f), glm::vec3(-M_PI/4,0,0));
             frameBufferManager = std::make_unique<FrameBufferManager>();
-            frameBufferManager->create_buffers(camera.screenWidth, camera.screenHeight);
+            frameBufferManager->create_buffers(camera->screenWidth, camera->screenHeight);
 
             auto standModel = Importer::loadModel("../res/models/mesh1.txt");
             std::vector<Model<PosNorTexVertex>> armModels;

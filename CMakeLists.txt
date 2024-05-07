@@ -81,6 +81,8 @@ set(APP_SRC
         dep/inc/stb/stb_image.h
         src/texture/Texture.cpp
         src/texture/Texture.h
+        src/camera/baseCamera.cpp
+        src/camera/baseCamera.h
 )
 
 # Include directories

@@ -81,6 +81,11 @@ set(APP_SRC
         dep/inc/stb/stb_image.h
         src/texture/Texture.cpp
         src/texture/Texture.h
+        src/spark/SparkGenerator.cpp
+        src/spark/SparkGenerator.h
+        src/spark/Spark.h
+        src/spark/SparksEntity.cpp
+        src/spark/SparksEntity.h
 )
 
 # Include directories

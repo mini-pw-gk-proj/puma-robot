@@ -13,10 +13,7 @@
 #include <map>
 #include "baseCamera.h"
 
-enum CameraMode {
-    FREE,
-    ANCHOR
-};
+
 
 
 class CameraAnchorFree : public BaseCamera {

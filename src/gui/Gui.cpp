@@ -145,9 +145,9 @@ void Gui::showSceneWindow() {
     ImGui::End();
 }
 
-void Gui::showScene () const
+void Gui::showScene ()
 {
-    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    const ImGuiViewport *viewport = ImGui::GetMainViewport();
     static bool use_work_area = true;
     ImGui::SetNextWindowPos(use_work_area ? viewport->WorkPos : viewport->Pos);
     ImGui::SetNextWindowSize(use_work_area ? viewport->WorkSize : viewport->Size);
@@ -167,8 +167,86 @@ void Gui::showScene () const
 
     // add rendered texture to ImGUI scene window
     uint64_t textureID = appContext.frameBufferManager->get_texture();
-    ImVec2 canvas_sz = ImVec2{ viewportPanelSize.x, viewportPanelSize.y };
-    ImGui::Image(reinterpret_cast<void*>(textureID), canvas_sz, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+    ImVec2 canvas_sz = ImVec2{viewportPanelSize.x, viewportPanelSize.y};
+    ImGui::Image(reinterpret_cast<void *>(textureID), canvas_sz, ImVec2{0, 1}, ImVec2{1, 0});
+
+    if(appContext.cameraType == CameraType::GAMELIKE)
+    {
+        updateCameraPos(canvas_sz);
+    }
 
     ImGui::End();
+
 }
+
+void Gui::updateCameraPos (ImVec2 canvas_sz)
+{
+    ImGui::SetCursorPos(ImVec2{0, 0});
+    ImGui::InvisibleButton("canvas", canvas_sz, ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
+    const bool is_hovered = ImGui::IsItemHovered(); // Hovered
+    const bool is_active = ImGui::IsItemActive();   // Held
+    static bool adding_line = false;
+    static ImVec2 startClick = ImVec2{0, 0};
+    const ImVec2 mouse_pos_in_canvas(ImGui::GetIO().MousePos);
+    auto io = ImGui::GetIO();
+
+    if (is_hovered && !adding_line && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+    {
+        startClick = mouse_pos_in_canvas;
+        adding_line = true;
+    }
+
+    if (adding_line)
+    {
+        appContext.camera->processMouseMovement(
+                (mouse_pos_in_canvas.y - startClick.y) * 0.8f,  // TODO Fix sensitivity
+                (mouse_pos_in_canvas.x - startClick.x) * 0.8f
+                                               );
+        startClick = mouse_pos_in_canvas;
+        if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
+            adding_line = false;
+    }
+
+    if(is_hovered)
+    {
+
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_W)))
+        {
+            appContext.camera->processKeyboard(CameraMovement::BACKWARD, 0);
+        }
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_S)))
+        {
+            appContext.camera->processKeyboard(CameraMovement::FORWARD, 0);
+        }
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_A)))
+        {
+            appContext.camera->processKeyboard(CameraMovement::LEFT, 0);
+        }
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_D)))
+        {
+            appContext.camera->processKeyboard(CameraMovement::RIGHT, 0);
+        }
+
+        if (io.KeyCtrl)
+        {
+            appContext.camera->processKeyboard(CameraMovement::DOWN, 0);
+        }
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_Space)))
+        {
+            appContext.camera->processKeyboard(CameraMovement::UP, 0);
+        }
+
+        if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_LeftShift)))
+        {
+            // TODO
+            //ApplicationContext::Instance().camera->speedUp();
+        }
+        if (ImGui::IsKeyReleased(ImGui::GetKeyIndex(ImGuiKey_LeftShift)))
+        {
+            // TODO
+            //ApplicationContext::Instance().camera->speedDown();
+        }
+
+    }
+}
+

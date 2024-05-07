@@ -83,6 +83,8 @@ set(APP_SRC
         src/texture/Texture.h
         src/camera/baseCamera.cpp
         src/camera/baseCamera.h
+        src/camera/CameraGameLike.cpp
+        src/camera/CameraGameLike.h
 )
 
 # Include directories

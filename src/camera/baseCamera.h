@@ -16,7 +16,19 @@ enum CameraMovement {
     FORWARD,
     BACKWARD,
     LEFT,
-    RIGHT
+    RIGHT,
+    UP,
+    DOWN
+};
+
+enum CameraMode {
+    FREE,
+    ANCHOR
+};
+
+enum CameraType {
+    FREEANCHOR,
+    GAMELIKE
 };
 
 // Default camera values

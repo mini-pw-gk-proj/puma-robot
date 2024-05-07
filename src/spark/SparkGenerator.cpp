@@ -8,8 +8,8 @@ void SparkGenerator::update() {
     // WIP
     if(sparks.empty()) sparks.push_back(Spark{
         {},
-        appContext.robot->kinematics.needlePosition,
-        -appContext.robot->kinematics.needleOrientation,
+        robot.kinematics.needlePosition,
+        -robot.kinematics.needleOrientation,
         5});
     sparks[0].ttl -= glfwGetTime();
     if(sparks[0].ttl < 0) sparks.pop_back();

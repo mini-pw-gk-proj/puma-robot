@@ -18,9 +18,9 @@ class SparkGenerator {
     constexpr static float MAX_ANGLE = M_PI/2;
     constexpr static float MAX_VELOCITY = 2;
 
-    AppContext &appContext;
+    Robot &robot;
 public:
-    explicit SparkGenerator(AppContext &appContext) : appContext(appContext) {}
+    explicit SparkGenerator(Robot &robot) : robot(robot) {}
 
     std::vector<Spark> sparks;
     void update();

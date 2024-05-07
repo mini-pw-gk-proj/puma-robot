@@ -25,7 +25,7 @@ class Scene {
 
     void drawMirrorScene(PointLight light);
     void setupMirrorPhong(PointLight light);
-    void drawSceneNoMirror();
+    void drawSceneNoMirror(bool drawCylinder = true);
     void drawSceneOnlyMirrorFront();
     void drawSceneOnlyMirrorBack();
 

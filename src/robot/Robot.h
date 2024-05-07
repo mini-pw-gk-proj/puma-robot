@@ -21,7 +21,7 @@ class Robot {
     std::unique_ptr<Mesh<PosNorTexVertex>> standMeshVolume;
     std::vector<Mesh<PosNorTexVertex>> armMeshesVolume;
 
-    Material material{{0.15,0.15,0.3,1},0.7,0.9};
+    Material material{{0.15,0.15,0.3,1},0.5,1};
 public:
     bool onFire;
     RobotKinematics kinematics;

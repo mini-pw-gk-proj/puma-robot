@@ -6,6 +6,7 @@ in vec3 normal;
 in vec2 texCoords;
 
 uniform vec3 viewPos;
+uniform bool isMirror;
 
 // Material
 struct Material {
@@ -76,35 +77,37 @@ void main() {
     vec3 V = normalize(viewPos - fragPos);
 
     vec3 Lo = vec3(0.0);
-    for(int i = 0; i < 1; ++i)
-    {
-        vec3 L = normalize(pointLight.position - fragPos);
-        vec3 H = normalize(V + L);
-        vec3 radiance = pointLight.color;
-        // Fresnel
-        vec3 F0 = vec3(0.04);
-        F0 = mix(F0, albedo.rgb, metallic);
-        vec3 F  = fresnelSchlick(max(dot(H, V), 0.0), F0);
+    float alpha = albedo.a;
+    vec3 L = normalize(pointLight.position - fragPos);
+    vec3 H = normalize(V + L);
+    vec3 radiance = pointLight.color;
+    // Fresnel
+    vec3 F0 = vec3(0.04);
+    F0 = mix(F0, albedo.rgb, metallic);
+    vec3 F  = fresnelSchlick(max(dot(H, V), 0.0), F0);
 
-        float NDF = DistributionGGX(N, H, roughness);
-        float G   = GeometrySmith(N, V, L, roughness);
+    float NDF = DistributionGGX(N, H, roughness);
+    float G   = GeometrySmith(N, V, L, roughness);
 
-        vec3 numerator    = NDF * G * F;
-        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0)  + 0.0001;
-        vec3 specular     = numerator / denominator;
+    vec3 numerator    = NDF * G * F;
+    float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0)  + 0.0001;
+    vec3 specular     = numerator / denominator;
 
-        vec3 kS = F;
-        vec3 kD = vec3(1.0) - kS;
-        kD *= 1.0 - metallic;
+    vec3 kS = F;
+    vec3 kD = vec3(1.0) - kS;
+    kD *= 1.0 - metallic;
 
-        float NdotL = max(dot(N, L), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
 
-        Lo += (kD * albedo.rgb / PI + specular) * radiance * NdotL * pointLight.strength;
-    }
+    Lo += (kD * albedo.rgb / PI + specular) * radiance * NdotL * pointLight.strength;
 
     vec3 ambient = vec3(0.1) * albedo.rgb;
     vec3 color   = ambient + Lo;
+    if(isMirror && alpha==0) {
+        alpha = specular.r;
+        color = specular;
+    }
     float gamma = 2.2f;
     color =  pow(color, vec3(1.0/gamma));
-    fragColor = vec4(color, albedo.w);
+    fragColor = vec4(color, alpha);
 }

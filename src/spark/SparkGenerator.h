@@ -22,7 +22,7 @@ public:
     explicit SparkGenerator(Robot &robot) : robot(robot) {}
 
     std::vector<Spark> sparks;
-    void update();
+    void update(bool generate);
 };
 
 

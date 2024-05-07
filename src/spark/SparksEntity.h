@@ -20,7 +20,7 @@ public:
         mesh({}, {}, GL_POINTS),
         sparkGenerator(robot) {}
 
-    void update();
+    void update(bool generate);
     void render(Shader &shader);
 };
 

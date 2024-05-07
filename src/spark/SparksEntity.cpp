@@ -4,8 +4,8 @@
 
 #include "SparksEntity.h"
 
-void SparksEntity::update() {
-    sparkGenerator.update();
+void SparksEntity::update(bool generate) {
+    sparkGenerator.update(generate);
     std::vector<SparkVertex> vertices(sparkGenerator.sparks.size());
     std::transform(sparkGenerator.sparks.begin(), sparkGenerator.sparks.end(), vertices.begin(),
                    [&](const auto &spark) {

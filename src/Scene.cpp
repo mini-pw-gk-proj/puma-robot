@@ -26,7 +26,7 @@ void Scene::update() {
     appContext.light->updateColor(glm::vec4(appContext.pointLight.color, 1.0f));
     appContext.light->updatePosition(appContext.pointLight.position);
 
-    appContext.sparks->update();
+    appContext.sparks->update(appContext.robot->kinematics.movementState == RobotKinematics::AnimatedInverseKinematics);
 }
 
 void Scene::render() {
@@ -59,7 +59,7 @@ void Scene::render() {
 
     drawTrail();
     drawPointLight();
-    if(appContext.robot->kinematics.movementState == RobotKinematics::AnimatedInverseKinematics) drawSparks();
+    drawSparks();
 
     appContext.frameBufferManager->unbind();
 }

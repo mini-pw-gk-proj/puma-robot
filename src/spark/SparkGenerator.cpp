@@ -5,8 +5,8 @@
 #include <random>
 #include "SparkGenerator.h"
 
-void SparkGenerator::update() {
-    if(sparks.size() < MAX_SPARKS) {
+void SparkGenerator::update(bool generate) {
+    if(generate && sparks.size() < MAX_SPARKS) {
         std::mt19937 rng(std::random_device{}());
         std::uniform_real_distribution<float> dist(0, 1);
         std::uniform_real_distribution<float> distDev(1, 2);

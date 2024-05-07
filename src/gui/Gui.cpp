@@ -144,7 +144,7 @@ void Gui::showSceneWindow() {
     // Camera type
     ImGui::SeparatorText("Camera");
 
-    const char* itemsC[] = { "Free Anchor", "Game like" };
+    const char* itemsC[] = { "Anchor", "Game like" };
     static int chosenCamera = CameraType::GAMELIKE;
 
     if(ImGui::Combo("Camera##combo", &(chosenCamera), itemsC, CameraType::COUNT))

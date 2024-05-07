@@ -2,8 +2,8 @@
 // Created by faliszewskii on 18.04.24.
 //
 
-#ifndef PUMAROBOT_CAMERA_H
-#define PUMAROBOT_CAMERA_H
+#ifndef PUMAROBOT_CAMERAANCHORFREE_H
+#define PUMAROBOT_CAMERAANCHORFREE_H
 
 #include <glm/gtc/quaternion.hpp>
 #include <glm/glm.hpp>
@@ -19,7 +19,7 @@ enum CameraMode {
 };
 
 
-class Camera : public BaseCamera {
+class CameraAnchorFree : public BaseCamera {
 private:
     CameraMode cameraType;
 
@@ -43,16 +43,16 @@ public:
     float stereoscopicIOD = 0.068;
     float stereoscopicDistance = 9;
 
-    std::map<CameraMode, void (Camera::*)(float, float)> mouseHandlerMapping{
-            {CameraMode::FREE,   &Camera::processMouseMovementFree},
-            {CameraMode::ANCHOR, &Camera::processMouseMovementAnchor}
+    std::map<CameraMode, void (CameraAnchorFree::*)(float, float)> mouseHandlerMapping{
+            {CameraMode::FREE,   &CameraAnchorFree::processMouseMovementFree},
+            {CameraMode::ANCHOR, &CameraAnchorFree::processMouseMovementAnchor}
     };
-    std::map<CameraMode, void (Camera::*)(CameraMovement direction, float)> keyboardHandlerMapping{
-            {CameraMode::FREE,   &Camera::processKeyboardFree},
-            {CameraMode::ANCHOR, &Camera::processKeyboardAnchor}
+    std::map<CameraMode, void (CameraAnchorFree::*)(CameraMovement direction, float)> keyboardHandlerMapping{
+            {CameraMode::FREE,   &CameraAnchorFree::processKeyboardFree},
+            {CameraMode::ANCHOR, &CameraAnchorFree::processKeyboardAnchor}
     };
 
-    explicit Camera(
+    explicit CameraAnchorFree(
             int screenWidth,
             int screenHeight,
             CameraMode cameraMode = FREE,
@@ -85,4 +85,4 @@ private:
 
 };
 
-#endif //PUMAROBOT_CAMERA_H
+#endif //PUMAROBOT_CAMERAANCHORFREE_H

@@ -10,7 +10,7 @@
 #include "../room/Room.h"
 #include "../cylinder/Cylinder.h"
 #include "../mirror/Mirror.h"
-#include "../camera/Camera.h"
+#include "../camera/CameraAnchorFree.h"
 #include "../framebufferManager/FrameBufferManager.h"
 #include "../importer/Importer.h"
 #include "../light/PointLight.h"
@@ -46,7 +46,7 @@ struct AppContext {
     AppContext() : // TODO Remove fixed screen resolution
         frameBufferManager()
         {
-            camera = std::make_unique<Camera>(1920, 1080, CameraMode::ANCHOR, glm::vec3(0.0f, 3.0f, 3.0f), glm::vec3(0.f), glm::vec3(-M_PI/4,0,0));
+            camera = std::make_unique<CameraAnchorFree>(1920, 1080, CameraMode::ANCHOR, glm::vec3(0.0f, 3.0f, 3.0f), glm::vec3(0.f), glm::vec3(-M_PI / 4, 0, 0));
             frameBufferManager = std::make_unique<FrameBufferManager>();
             frameBufferManager->create_buffers(camera->screenWidth, camera->screenHeight);
 

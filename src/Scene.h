@@ -7,7 +7,7 @@
 
 
 #include "robot/Robot.h"
-#include "camera/Camera.h"
+#include "camera/CameraAnchorFree.h"
 #include "app/AppContext.h"
 
 class Scene {

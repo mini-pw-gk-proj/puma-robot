@@ -80,11 +80,15 @@ void CameraGameLike::processKeyboard (CameraMovement direction, float deltaTime)
         moveUp();
     if (direction == DOWN)
         moveDown();
+    if (direction == SPEEDUP)
+        speedUp();
+    if (direction == SPEEDDOWN)
+        speedDown();
 }
 
 void CameraGameLike::processMouseMovement (float xoffset, float yoffset)
 {
-    rotate(xoffset, yoffset);
+    rotate(-xoffset, -yoffset);
 }
 
 void CameraGameLike::processMouseScroll (float yoffset)
@@ -107,12 +111,12 @@ CameraGameLike::CameraGameLike (
 
 void CameraGameLike::moveForward ()
 {
-    Position += speed * -Orientation;
+    Position += speed * +Orientation;
 }
 
 void CameraGameLike::moveBackward ()
 {
-    Position += speed * +Orientation;
+    Position += speed * -Orientation;
 }
 
 void CameraGameLike::moveLeft ()

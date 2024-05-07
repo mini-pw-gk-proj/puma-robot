@@ -40,17 +40,37 @@ struct AppContext {
 
     CameraType cameraType;
 
+    float cameraSensitivity = 0.8f;
+
     void glfw_window_resize(unsigned int width, unsigned int height)
     {
         camera->resize(width, height); // NOLINT(*-narrowing-conversions)
         frameBufferManager->create_buffers(camera->screenWidth, camera->screenHeight);
     }
 
+    void allocateCamera(CameraType setType)
+    {
+        cameraType = setType;
+        switch(setType)
+        {
+            case CameraType::GAMELIKE:
+                if(camera != nullptr)
+                    camera.reset();
+                camera = std::make_unique<CameraGameLike>(1920, 1080, CameraMode::ANCHOR, glm::vec3(0.0f, 3.0f, 3.0f), glm::vec3(0.f), glm::vec3(-M_PI / 4, 0, 0));
+                break;
+            case CameraType::FREEANCHOR:
+                if(camera != nullptr)
+                    camera.reset();
+                camera = std::make_unique<CameraAnchorFree>(1920, 1080, CameraMode::ANCHOR, glm::vec3(0.0f, 3.0f, 3.0f), glm::vec3(0.f), glm::vec3(-M_PI / 4, 0, 0));
+                break;
+
+        }
+    }
+
     AppContext() : // TODO Remove fixed screen resolution
         frameBufferManager()
         {
-            camera = std::make_unique<CameraGameLike>(1920, 1080, CameraMode::ANCHOR, glm::vec3(0.0f, 3.0f, 3.0f), glm::vec3(0.f), glm::vec3(-M_PI / 4, 0, 0));
-            cameraType = CameraType::GAMELIKE;
+            allocateCamera(CameraType::GAMELIKE);
             frameBufferManager = std::make_unique<FrameBufferManager>();
             frameBufferManager->create_buffers(camera->screenWidth, camera->screenHeight);
 

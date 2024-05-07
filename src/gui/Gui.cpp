@@ -141,6 +141,20 @@ void Gui::showSceneWindow() {
     if(ImGui::Combo("Color##combo", &chosenLight, itemsL, IM_ARRAYSIZE(items)))
         appContext.pointLight.color = lights.at(chosenLight);
 
+    // Camera type
+    ImGui::SeparatorText("Camera");
+
+    const char* itemsC[] = { "Free Anchor", "Game like" };
+    static int chosenCamera = CameraType::GAMELIKE;
+
+    if(ImGui::Combo("Camera##combo", &(chosenCamera), itemsC, CameraType::COUNT))
+        appContext.allocateCamera(CameraType(chosenCamera));
+
+    if(appContext.cameraType == CameraType::GAMELIKE)
+    {
+        ImGui::DragFloat("Camera sensitivity", &(appContext.cameraSensitivity), 0.01f, 0.01f, 1.0f);
+    }
+
 
     ImGui::End();
 }
@@ -199,8 +213,8 @@ void Gui::updateCameraPos (ImVec2 canvas_sz)
     if (adding_line)
     {
         appContext.camera->processMouseMovement(
-                (mouse_pos_in_canvas.y - startClick.y) * 0.8f,  // TODO Fix sensitivity
-                (mouse_pos_in_canvas.x - startClick.x) * 0.8f
+                (mouse_pos_in_canvas.y - startClick.y) * appContext.cameraSensitivity,
+                (mouse_pos_in_canvas.x - startClick.x) * appContext.cameraSensitivity
                                                );
         startClick = mouse_pos_in_canvas;
         if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
@@ -212,11 +226,11 @@ void Gui::updateCameraPos (ImVec2 canvas_sz)
 
         if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_W)))
         {
-            appContext.camera->processKeyboard(CameraMovement::BACKWARD, 0);
+            appContext.camera->processKeyboard(CameraMovement::FORWARD, 0);
         }
         if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_S)))
         {
-            appContext.camera->processKeyboard(CameraMovement::FORWARD, 0);
+            appContext.camera->processKeyboard(CameraMovement::BACKWARD, 0);
         }
         if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_A)))
         {
@@ -238,13 +252,11 @@ void Gui::updateCameraPos (ImVec2 canvas_sz)
 
         if (ImGui::IsKeyDown(ImGui::GetKeyIndex(ImGuiKey_LeftShift)))
         {
-            // TODO
-            //ApplicationContext::Instance().camera->speedUp();
+            appContext.camera->processKeyboard(CameraMovement::SPEEDUP, 0);
         }
         if (ImGui::IsKeyReleased(ImGui::GetKeyIndex(ImGuiKey_LeftShift)))
         {
-            // TODO
-            //ApplicationContext::Instance().camera->speedDown();
+            appContext.camera->processKeyboard(CameraMovement::SPEEDDOWN, 0);
         }
 
     }

@@ -18,7 +18,9 @@ enum CameraMovement {
     LEFT,
     RIGHT,
     UP,
-    DOWN
+    DOWN,
+    SPEEDUP,
+    SPEEDDOWN
 };
 
 enum CameraMode {
@@ -28,7 +30,8 @@ enum CameraMode {
 
 enum CameraType {
     FREEANCHOR,
-    GAMELIKE
+    GAMELIKE,
+    COUNT
 };
 
 // Default camera values

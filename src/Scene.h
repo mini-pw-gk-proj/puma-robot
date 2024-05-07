@@ -19,12 +19,13 @@ class Scene {
     Shader trailShader;
     Shader pointShader;
     Shader flameShader;
+    Shader sparkShader;
 
     AppContext &appContext;
 
     void drawMirrorScene(PointLight light);
     void setupMirrorPhong(PointLight light);
-    void drawSceneNoMirror();
+    void drawSceneNoMirror(bool drawCylinder = true);
     void drawSceneOnlyMirrorFront();
     void drawSceneOnlyMirrorBack();
 
@@ -53,6 +54,8 @@ public:
     void drawPointLight();
 
     void drawSkyboxMirrored();
+
+    void drawSparks();
 };
 
 

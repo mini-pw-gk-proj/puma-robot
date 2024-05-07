@@ -85,6 +85,12 @@ set(APP_SRC
         src/camera/baseCamera.h
         src/camera/CameraGameLike.cpp
         src/camera/CameraGameLike.h
+        src/spark/SparkGenerator.cpp
+        src/spark/SparkGenerator.h
+        src/spark/Spark.h
+        src/spark/SparksEntity.cpp
+        src/spark/SparksEntity.h
+        src/mesh/SparkVertex.h
 )
 
 # Include directories

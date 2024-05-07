@@ -10,10 +10,10 @@ Model<PosNorTexVertex> Mirror::generateMirrorPlaneFront ()
 
     std::vector<PosNorTexVertex> vertices = {
             // Front face
-            {glm::vec3(0, -0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
-            {glm::vec3(0, -0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
-            {glm::vec3(0, +0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
-            {glm::vec3(0, +0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2()},
+            {glm::vec3(0, -0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2(0, 0)},
+            {glm::vec3(0, -0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2(1,0)},
+            {glm::vec3(0, +0.5f, +0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2(1, 1)},
+            {glm::vec3(0, +0.5f, -0.5f), glm::vec3(+1.0f, 0.0f, 0.0f), glm::vec2(0, 1)},
 
     };
 
@@ -141,7 +141,8 @@ void Mirror::renderBack (Shader &shader)
 
 void Mirror::renderFront (Shader &shader)
 {
-    shader.setUniform("material.hasTexture", false);
+    shader.setUniform("material.hasTexture", true);
+    texture.bind(0);
     transparentMaterial.setupMaterial(shader);
     shader.setUniform("model", getModel());
     meshFront->render();

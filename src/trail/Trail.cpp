@@ -18,6 +18,9 @@ void Trail::update(bool shouldReset) {
         reset();
         return;
     }
+    if(--skip > 0 ) return;
+    skip = SKIP;
+
 
     if(pointCount < TRAIL_POINTS) pointCount++;
 

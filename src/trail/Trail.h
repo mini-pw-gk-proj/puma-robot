@@ -14,10 +14,12 @@ class Trail {
 
     Robot &robot;
 
-    static constexpr int TRAIL_POINTS = 200;
+    static constexpr int TRAIL_POINTS = 256;
+    static constexpr int SKIP = 2;
     std::array<glm::vec3, TRAIL_POINTS> trailPoints{};
     int pointCount{};
     int caret{};
+    int skip{};
 
 public:
     explicit Trail(Robot &robot);

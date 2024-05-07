@@ -13,6 +13,7 @@ Scene::Scene(AppContext &appContext) :
         trailShader("../res/shaders/trail/trail.vert","../res/shaders/trail/trail.geom", "../res/shaders/trail/trail.frag"),
         pointShader("../res/shaders/point/point.vert","../res/shaders/point/point.frag"),
         flameShader("../res/shaders/flame/flame.vert", "../res/shaders/flame/flame.geom","../res/shaders/flame/flame.frag"),
+        sparkShader("../res/shaders/spark/spark.vert", "../res/shaders/spark/spark.geom","../res/shaders/spark/spark.frag"),
         appContext(appContext)
     {}
 
@@ -20,9 +21,12 @@ void Scene::update() {
     auto timeS = float(glfwGetTime());
 
     appContext.robot->update(timeS);
+
     appContext.trail->update(appContext.robot->kinematics.movementState != RobotKinematics::AnimatedInverseKinematics);
     appContext.light->updateColor(glm::vec4(appContext.pointLight.color, 1.0f));
     appContext.light->updatePosition(appContext.pointLight.position);
+
+    appContext.sparks->update(appContext.robot->kinematics.movementState == RobotKinematics::AnimatedInverseKinematics);
 }
 
 void Scene::render() {
@@ -55,8 +59,17 @@ void Scene::render() {
 
     drawTrail();
     drawPointLight();
+    drawSparks();
 
     appContext.frameBufferManager->unbind();
+}
+
+void Scene::drawSparks() {
+    sparkShader.use();
+    sparkShader.setUniform("view", appContext.camera.getViewMatrix());
+    sparkShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    sparkShader.setUniform("viewPos", appContext.camera.getViewPosition());
+    appContext.sparks->render(sparkShader);
 }
 
 void Scene::drawPointLight() {
@@ -178,6 +191,7 @@ void Scene::setupPhong(PointLight light) {
     pbrShader.setUniform("view", appContext.camera->getViewMatrix());
     pbrShader.setUniform("projection", appContext.camera->getProjectionMatrix());
     pbrShader.setUniform("viewPos", appContext.camera->getViewPosition());
+    pbrShader.setUniform("isMirror", false);
     light.setupPointLight(pbrShader);
 }
 
@@ -212,7 +226,7 @@ void Scene::drawMirrorScene (PointLight light)
 
     drawSkyboxMirrored();
     setupMirrorPhong(light);
-    drawSceneNoMirror();
+    drawSceneNoMirror(appContext.camera.getViewPosition().z > -1);
     if(appContext.robot->onFire) drawFlamesMirrored();
 
     glFrontFace(GL_CCW);
@@ -230,19 +244,22 @@ void Scene::setupMirrorPhong (PointLight light)
     pbrShader.setUniform("view", appContext.camera->getMirrorViewMatrix());
     pbrShader.setUniform("projection", appContext.camera->getProjectionMatrix());
     pbrShader.setUniform("viewPos", appContext.camera->getViewPosition());
+    pbrShader.setUniform("isMirror", false);
     light.setupPointLight(pbrShader);
 }
 
-void Scene::drawSceneNoMirror ()
+void Scene::drawSceneNoMirror(bool drawCylinder)
 {
     appContext.robot->render(pbrShader);
     appContext.room->render(pbrShader);
-    appContext.cylinder->render(pbrShader);
+    if(drawCylinder) appContext.cylinder->render(pbrShader);
 }
 
 void Scene::drawSceneOnlyMirrorFront ()
 {
+    pbrShader.setUniform("isMirror", true);
     appContext.mirror->renderFront(pbrShader);
+    pbrShader.setUniform("isMirror", false);
 }
 void Scene::drawSceneOnlyMirrorBack ()
 {

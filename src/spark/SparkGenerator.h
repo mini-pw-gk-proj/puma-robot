@@ -9,7 +9,7 @@
 #include <vector>
 #include <cmath>
 #include "Spark.h"
-#include "../app/AppContext.h"
+#include "../robot/Robot.h"
 
 class SparkGenerator {
     // TODO: Could be extracted to GUI

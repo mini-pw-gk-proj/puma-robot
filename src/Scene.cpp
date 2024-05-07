@@ -74,39 +74,39 @@ void Scene::drawSparks() {
 
 void Scene::drawPointLight() {
     pointShader.use();
-    pointShader.setUniform("view", appContext.camera.getViewMatrix());
-    pointShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    pointShader.setUniform("view", appContext.camera->getViewMatrix());
+    pointShader.setUniform("projection", appContext.camera->getProjectionMatrix());
     appContext.light->render(pointShader);
 }
 
 void Scene::drawTrail() {
     trailShader.use();
-    trailShader.setUniform("view", appContext.camera.getViewMatrix());
-    trailShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    trailShader.setUniform("view", appContext.camera->getViewMatrix());
+    trailShader.setUniform("projection", appContext.camera->getProjectionMatrix());
     appContext.trail->render(trailShader);
 }
 
 void Scene::drawSkybox() {
     skyboxShader.use();
-    skyboxShader.setUniform("view", appContext.camera.getNoTranslationViewMatrix());
-    skyboxShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    skyboxShader.setUniform("view", appContext.camera->getNoTranslationViewMatrix());
+    skyboxShader.setUniform("projection", appContext.camera->getProjectionMatrix());
     skyboxShader.setUniform("skybox", 0);
     appContext.skybox->render();
 }
 
 void Scene::drawSkyboxMirrored() {
     skyboxShader.use();
-    skyboxShader.setUniform("view", glm::mat4(glm::mat3(appContext.camera.getMirrorViewMatrix())));
-    skyboxShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    skyboxShader.setUniform("view", glm::mat4(glm::mat3(appContext.camera->getMirrorViewMatrix())));
+    skyboxShader.setUniform("projection", appContext.camera->getProjectionMatrix());
     skyboxShader.setUniform("skybox", 0);
     appContext.skybox->render();
 }
 
 void Scene::drawFlames() {
-    flameShader.setUniform("projection", appContext.camera.getProjectionMatrix());
-    flameShader.setUniform("viewPos", appContext.camera.getViewPosition());
+    flameShader.setUniform("projection", appContext.camera->getProjectionMatrix());
+    flameShader.setUniform("viewPos", appContext.camera->getViewPosition());
     flameShader.setUniform("time", (float)glfwGetTime());
-    flameShader.setUniform("screenX", appContext.camera.screenWidth);
+    flameShader.setUniform("screenX", appContext.camera->screenWidth);
     flameShader.setUniform("noise", 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_1D, appContext.flame->noiseTextureId);
@@ -121,13 +121,13 @@ void Scene::drawFlames() {
 
 void Scene::drawFlamesNormal() {
     flameShader.use();
-    flameShader.setUniform("view", appContext.camera.getViewMatrix());
+    flameShader.setUniform("view", appContext.camera->getViewMatrix());
     drawFlames();
 }
 
 void Scene::drawFlamesMirrored() {
     flameShader.use();
-    flameShader.setUniform("view", appContext.camera.getMirrorViewMatrix());
+    flameShader.setUniform("view", appContext.camera->getMirrorViewMatrix());
     drawFlames();
 }
 
@@ -177,8 +177,8 @@ void Scene::createShadowMask() {
 
 void Scene::drawShadowVolume() {
     shadowShader.use();
-    shadowShader.setUniform("view", appContext.camera.getViewMatrix());
-    shadowShader.setUniform("projection", appContext.camera.getProjectionMatrix());
+    shadowShader.setUniform("view", appContext.camera->getViewMatrix());
+    shadowShader.setUniform("projection", appContext.camera->getProjectionMatrix());
     shadowShader.setUniform("lightPos", appContext.pointLight.position);
 
     appContext.mirror->renderShadow(shadowShader);
@@ -188,10 +188,10 @@ void Scene::drawShadowVolume() {
 
 void Scene::setupPhong(PointLight light) {
     pbrShader.use();
+    pbrShader.setUniform("view", appContext.camera->getViewMatrix());
+    pbrShader.setUniform("projection", appContext.camera->getProjectionMatrix());
+    pbrShader.setUniform("viewPos", appContext.camera->getViewPosition());
     pbrShader.setUniform("isMirror", false);
-    pbrShader.setUniform("view", appContext.camera.getViewMatrix());
-    pbrShader.setUniform("projection", appContext.camera.getProjectionMatrix());
-    pbrShader.setUniform("viewPos", appContext.camera.getViewPosition());
     light.setupPointLight(pbrShader);
 }
 
@@ -241,10 +241,10 @@ void Scene::drawMirrorScene (PointLight light)
 void Scene::setupMirrorPhong (PointLight light)
 {
     pbrShader.use();
+    pbrShader.setUniform("view", appContext.camera->getMirrorViewMatrix());
+    pbrShader.setUniform("projection", appContext.camera->getProjectionMatrix());
+    pbrShader.setUniform("viewPos", appContext.camera->getViewPosition());
     pbrShader.setUniform("isMirror", false);
-    pbrShader.setUniform("view", appContext.camera.getMirrorViewMatrix());
-    pbrShader.setUniform("projection", appContext.camera.getProjectionMatrix());
-    pbrShader.setUniform("viewPos", appContext.camera.getViewPosition());
     light.setupPointLight(pbrShader);
 }
 

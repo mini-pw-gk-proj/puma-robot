@@ -41,8 +41,8 @@ set(APP_SRC
         src/mesh/is_vertex.h
         src/mesh/PositionNormalVertex.h
         src/glew_glfw.h
-        src/camera/Camera.cpp
-        src/camera/Camera.h
+        src/camera/CameraAnchorFree.cpp
+        src/camera/CameraAnchorFree.h
         src/input/InputHandler.cpp
         src/input/InputHandler.h
         src/gui/Gui.cpp
@@ -81,6 +81,10 @@ set(APP_SRC
         dep/inc/stb/stb_image.h
         src/texture/Texture.cpp
         src/texture/Texture.h
+        src/camera/baseCamera.cpp
+        src/camera/baseCamera.h
+        src/camera/CameraGameLike.cpp
+        src/camera/CameraGameLike.h
         src/spark/SparkGenerator.cpp
         src/spark/SparkGenerator.h
         src/spark/Spark.h

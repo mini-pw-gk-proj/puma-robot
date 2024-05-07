@@ -2,20 +2,22 @@
 // Created by faliszewskii on 07.01.24.
 //
 
-#include "Camera.h"
+#include "CameraAnchorFree.h"
 #include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/detail/type_quat.hpp>
 #include <glm/gtc/quaternion.hpp>
 
 
-Camera::Camera(int screenWidth, int screenHeight, CameraMode cameraMode, glm::vec3 position, glm::vec3 anchor,
-               glm::quat orientation) : cameraType(cameraMode), orientation(orientation),
+CameraAnchorFree::CameraAnchorFree(int screenWidth, int screenHeight, CameraMode cameraMode, glm::vec3 position, glm::vec3 anchor,
+                                   glm::quat orientation) : cameraType(cameraMode), orientation(orientation),
                                         movementSpeed(SPEED),
                                         mouseSensitivity(SENSITIVITY), zoomSensitivity(ZOOM_SENSITIVITY), position(position),
                                         anchor(anchor), nearPlane(0.01),
-                                        farPlane(100), fov(45.f),
-                                        screenWidth(screenWidth), screenHeight(screenHeight) {
+                                        farPlane(100), fov(45.f)
+                                        {
+    BaseCamera::screenWidth = screenWidth;
+    BaseCamera::screenHeight = screenHeight;
     // TODO Set orientation to anchor
     updateDirections();
 }
@@ -32,7 +34,7 @@ static glm::vec3 getRight(glm::quat q) {
     return glm::normalize(q * glm::vec3(1.0f, 0, 0));
 }
 
-void Camera::updateDirections() {
+void CameraAnchorFree::updateDirections() {
     front = getFront(orientation);
     up = getUp(orientation);
     right = getRight(orientation);
@@ -51,7 +53,7 @@ glm::mat4 myLookAt(glm::vec3 eye, glm::vec3 center, glm::vec3 up) {
     };
 }
 
-glm::mat4 Camera::getViewMatrix() const {
+glm::mat4 CameraAnchorFree::getViewMatrix() const {
     return myLookAt(position, position + front, up);
 }
 
@@ -66,23 +68,23 @@ glm::mat4 myProjection(float yFov, float aspectRatio, float zNear, float zFar) {
     };
 }
 
-glm::mat4 Camera::getProjectionMatrix() const {
+glm::mat4 CameraAnchorFree::getProjectionMatrix() const {
     return myProjection(glm::radians(fov), (float) screenWidth / (float) screenHeight, nearPlane, farPlane);
 }
 
-glm::vec3 Camera::getViewPosition() const {
+glm::vec3 CameraAnchorFree::getViewPosition() const {
     return position;
 }
 
-void Camera::processKeyboard(CameraMovement direction, float deltaTime) {
+void CameraAnchorFree::processKeyboard(CameraMovement direction, float deltaTime) {
     (this->*keyboardHandlerMapping[cameraType])(direction, deltaTime);
 }
 
-void Camera::processMouseMovement(float xoffset, float yoffset) {
+void CameraAnchorFree::processMouseMovement(float xoffset, float yoffset) {
     (this->*mouseHandlerMapping[cameraType])(xoffset, yoffset);
 }
 
-void Camera::processMouseMovementAnchor(float xoffset, float yoffset) {
+void CameraAnchorFree::processMouseMovementAnchor(float xoffset, float yoffset) {
     xoffset *= mouseSensitivity;
     yoffset *= mouseSensitivity;
 
@@ -94,12 +96,12 @@ void Camera::processMouseMovementAnchor(float xoffset, float yoffset) {
     updateDirections();
 }
 
-void Camera::processMouseScroll(float yoffset) {
+void CameraAnchorFree::processMouseScroll(float yoffset) {
     yoffset *= zoomSensitivity;
     position += front * yoffset;
 }
 
-void Camera::processMouseMovementFree(float xoffset, float yoffset) {
+void CameraAnchorFree::processMouseMovementFree(float xoffset, float yoffset) {
     // TODO
 //    xoffset *= mouseSensitivity;
 //    yoffset *= mouseSensitivity;
@@ -120,7 +122,7 @@ void Camera::processMouseMovementFree(float xoffset, float yoffset) {
 //    right = glm::normalize(glm::cross(front, worldUp));
 }
 
-void Camera::processKeyboardFree(CameraMovement direction, float deltaTime) {
+void CameraAnchorFree::processKeyboardFree(CameraMovement direction, float deltaTime) {
     float velocity = movementSpeed * deltaTime;
     if (direction == FORWARD)
         position += front * velocity;
@@ -132,7 +134,7 @@ void Camera::processKeyboardFree(CameraMovement direction, float deltaTime) {
         position += right * velocity;
 }
 
-void Camera::processKeyboardAnchor(CameraMovement direction, float deltaTime) {
+void CameraAnchorFree::processKeyboardAnchor(CameraMovement direction, float deltaTime) {
     float velocity = movementSpeed * deltaTime;
     if (direction == FORWARD)
         anchor += front * velocity;
@@ -147,17 +149,17 @@ void Camera::processKeyboardAnchor(CameraMovement direction, float deltaTime) {
     updateDirections();
 }
 
-void Camera::resize (int screenWidth, int screenHeight)
+void CameraAnchorFree::resize (int screenWidth, int screenHeight)
 {
     this->screenWidth = screenWidth;
     this->screenHeight = screenHeight;
 }
 
-glm::mat4 Camera::getNoTranslationViewMatrix() const {
+glm::mat4 CameraAnchorFree::getNoTranslationViewMatrix() const {
     return glm::mat3(myLookAt(position, position + front, up));
 }
 
-glm::mat4 Camera::getMirrorViewMatrix () const
+glm::mat4 CameraAnchorFree::getMirrorViewMatrix () const
 {
     glm::mat4 mirrorModel(1.0f);
 

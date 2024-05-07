@@ -39,50 +39,61 @@ void InputHandler::keyCallback(GLFWwindow *window, int key, int scancode, int ac
     //if (ImGui::GetIO().WantCaptureMouse) return;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    if (key == GLFW_KEY_W && action == GLFW_PRESS)
-        appContext.camera.processKeyboard(FORWARD, deltaTime);
-    if (key == GLFW_KEY_S && action == GLFW_PRESS)
-        appContext.camera.processKeyboard(BACKWARD, deltaTime);
-    if (key == GLFW_KEY_A && action == GLFW_PRESS)
-        appContext.camera.processKeyboard(LEFT, deltaTime);
-    if (key == GLFW_KEY_D && action == GLFW_PRESS)
-        appContext.camera.processKeyboard(RIGHT, deltaTime);
+    if (key == GLFW_KEY_W && action == GLFW_PRESS && appContext.cameraType == CameraType::FREEANCHOR)
+        appContext.camera->processKeyboard(FORWARD, deltaTime);
+    if (key == GLFW_KEY_S && action == GLFW_PRESS && appContext.cameraType == CameraType::FREEANCHOR)
+        appContext.camera->processKeyboard(BACKWARD, deltaTime);
+    if (key == GLFW_KEY_A && action == GLFW_PRESS && appContext.cameraType == CameraType::FREEANCHOR)
+        appContext.camera->processKeyboard(LEFT, deltaTime);
+    if (key == GLFW_KEY_D && action == GLFW_PRESS && appContext.cameraType == CameraType::FREEANCHOR)
+        appContext.camera->processKeyboard(RIGHT, deltaTime);
 }
 
 void InputHandler::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-        appContext.guiFocus = false;
-    else {
-        appContext.guiFocus = true;
+    if(appContext.cameraType == CameraType::FREEANCHOR)
+    {
+        if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+            appContext.guiFocus = false;
+        else
+        {
+            appContext.guiFocus = true;
+        }
     }
 }
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
 void InputHandler::mouseCallback(GLFWwindow *window, double xposIn, double yposIn) {
-    auto xpos = static_cast<float>(xposIn);
-    auto ypos = static_cast<float>(yposIn);
+    if(appContext.cameraType == CameraType::FREEANCHOR)
+    {
+        auto xpos = static_cast<float>(xposIn);
+        auto ypos = static_cast<float>(yposIn);
 
-    static float lastX = xpos;
-    static float lastY = ypos;
-    static bool firstMouse = true;
+        static float lastX = xpos;
+        static float lastY = ypos;
+        static bool firstMouse = true;
 
-    if (firstMouse) {
+        if (firstMouse)
+        {
+            lastX = xpos;
+            lastY = ypos;
+            firstMouse = false;
+        }
+
+        float xoffset = xpos - lastX;
+        float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
         lastX = xpos;
         lastY = ypos;
-        firstMouse = false;
+
+        if (!appContext.guiFocus)
+        {
+
+            appContext.camera->processMouseMovement(xoffset, yoffset);
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+        else glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    lastX = xpos;
-    lastY = ypos;
-
-    if (!appContext.guiFocus) {
-        appContext.camera.processMouseMovement(xoffset, yoffset);
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    } else glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
@@ -90,7 +101,10 @@ void InputHandler::mouseCallback(GLFWwindow *window, double xposIn, double yposI
 void InputHandler::scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
     // TODO: Reimplement handling of input to use imGUI
     //if (ImGui::GetIO().WantCaptureMouse) return;
-    appContext.camera.processMouseScroll(static_cast<float>(yoffset));
+    if(appContext.cameraType == CameraType::FREEANCHOR)
+    {
+        appContext.camera->processMouseScroll(static_cast<float>(yoffset));
+    }
 }
 
 void InputHandler::windowResize (GLFWwindow *window, int width, int height)

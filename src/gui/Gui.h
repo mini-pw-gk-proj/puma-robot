@@ -26,6 +26,8 @@ public:
     ~Gui();
 
     void showSceneWindow();
+
+    void drawLightUI(PointLight &pointLight, int i);
 };
 
 

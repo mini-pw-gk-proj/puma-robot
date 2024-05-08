@@ -18,7 +18,7 @@ class SparkGenerator {
     Robot &robot;
     float prevTime{};
 public:
-    constexpr static float MAX_TTL = 1;
+    constexpr static float MAX_TTL = 0.5;
     explicit SparkGenerator(Robot &robot) : robot(robot) {}
 
     std::vector<Spark> sparks;

@@ -23,39 +23,30 @@ class Scene {
 
     AppContext &appContext;
 
-    void drawMirrorScene(PointLight light);
-    void setupMirrorPhong(PointLight light);
+    void drawMirrorScene(PointLight &pointLight);
+    void setupMirrorPhong(PointLight &pointLight);
     void drawSceneNoMirror(bool drawCylinder = true);
     void drawSceneOnlyMirrorFront();
-    void drawSceneOnlyMirrorBack();
 
-    void drawShadowVolume();
-    void setupPhong(PointLight light);
+    void drawShadowVolume(PointLight &pointLight);
+    void setupPhong(PointLight &pointLight);
     void drawScene();
-    void createShadowMask();
-    void setupShadowedPhong();
+    void createShadowMask(PointLight &pointLight);
+    void setupShadowedPhong(PointLight &pointLight);
+
+    void drawFlames();
+    void drawFlamesNormal();
+    void drawFlamesMirrored();
+    void drawSkybox();
+    void drawTrail();
+    void drawPointLight(Point &point);
+    void drawSkyboxMirrored();
+    void drawSparks();
 
 public:
     explicit Scene(AppContext &appContext);
     void update();
     void render();
-
-
-    void drawFlames();
-
-    void drawFlamesNormal();
-
-    void drawFlamesMirrored();
-
-    void drawSkybox();
-
-    void drawTrail();
-
-    void drawPointLight();
-
-    void drawSkyboxMirrored();
-
-    void drawSparks();
 };
 
 

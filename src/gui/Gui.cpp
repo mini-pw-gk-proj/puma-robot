@@ -118,17 +118,8 @@ void Gui::showSceneWindow() {
     ImGui::Checkbox("Transp. wall", &appContext.room->isTransparent);
 
     // Point Light
-    ImGui::SeparatorText("Light");
-
-    float *position = glm::value_ptr(appContext.pointLight.position);
-    ImGui::DragFloat3("Light position", position, 0.02f);
-    if(position[0] < -3) position[0] = -3;
-    if(position[0] > 3) position[0] = 3;
-    if(position[1] < -1) position[1] = -1;
-    if(position[1] > 5) position[1] = 5;
-    if(position[2] < -3) position[2] = -3;
-    if(position[2] > 3) position[2] = 3;
-    appContext.pointLight.position = glm::vec3(position[0], position[1], position[2]);
+    drawLightUI(appContext.pointLight, 1);
+    drawLightUI(appContext.pointLight2, 2);
 
     const char* itemsL[] = { "40W Tungsten", "100W Tungsten", "Halogen" , "Carbon Arc"};
     const std::map<int, glm::vec3> lights {
@@ -157,6 +148,21 @@ void Gui::showSceneWindow() {
 
 
     ImGui::End();
+}
+
+void Gui::drawLightUI(PointLight &pointLight, int i) {
+    ImGui::SeparatorText(("Light " + std::to_string(i) +".").c_str());
+    float *position = glm::value_ptr(pointLight.position);
+    ImGui::DragFloat(("Light " + std::to_string(i) + ". strength").c_str(), &pointLight.strength, 0.02f);
+    if(pointLight.strength < 0) pointLight.strength = 0;
+    ImGui::DragFloat3(("Light " + std::to_string(i) + ". position").c_str(), position, 0.02f);
+    if(position[0] < -3) position[0] = -3;
+    if(position[0] > 3) position[0] = 3;
+    if(position[1] < -1) position[1] = -1;
+    if(position[1] > 5) position[1] = 5;
+    if(position[2] < -3) position[2] = -3;
+    if(position[2] > 3) position[2] = 3;
+    pointLight.position = glm::vec3(position[0], position[1], position[2]);
 }
 
 void Gui::showScene ()

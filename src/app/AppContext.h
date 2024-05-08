@@ -30,10 +30,12 @@ struct AppContext {
     std::unique_ptr<Skybox> skybox;
     std::unique_ptr<Trail> trail;
     std::unique_ptr<Point> light;
+    std::unique_ptr<Point> light2;
     std::unique_ptr<Flame> flame;
     std::unique_ptr<SparksEntity> sparks;
 
     PointLight pointLight;
+    PointLight pointLight2;
     std::unique_ptr<BaseCamera> camera;
 
     std::unique_ptr<FrameBufferManager> frameBufferManager;
@@ -58,7 +60,7 @@ struct AppContext {
             case CameraType::GAMELIKE:
                 if(camera != nullptr)
                     camera.reset();
-                camera = std::make_unique<CameraGameLike>(1920, 1080, CameraMode::ANCHOR, glm::vec3(0.0f, 3.0f, 3.0f), glm::vec3(0.f), glm::vec3(-M_PI / 4, 0, 0));
+                camera = std::make_unique<CameraGameLike>(1920, 1080, CameraMode::ANCHOR, glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.f), glm::vec3(-M_PI / 4, 0, 0));
                 break;
             case CameraType::FREEANCHOR:
                 if(camera != nullptr)
@@ -88,8 +90,11 @@ struct AppContext {
             skybox = std::make_unique<Skybox>();
             trail = std::make_unique<Trail>(*robot);
             light = std::make_unique<Point>();
+            light2 = std::make_unique<Point>();
             flame = std::make_unique<Flame>();
             sparks = std::make_unique<SparksEntity>(*robot);
+            pointLight2.position = glm::vec3(0,3.5,0);
+            pointLight2.strength = 0;
         }
 };
 

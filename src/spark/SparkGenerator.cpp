@@ -20,7 +20,7 @@ void SparkGenerator::update(bool generate) {
 
             float f2 = dist(rng) * (distBool(rng)?1.f:-1.f);
             float f3 = dist(rng) * (distBool(rng)?1.f:-1.f);
-            float speed = 0.01f * distSpeed(rng);
+            float speed = 0.02f * distSpeed(rng);
             glm::vec3 dir = glm::normalize(f2 * v2 + f3 * v3);
             float distance = distDev(rng);
 
@@ -39,7 +39,7 @@ void SparkGenerator::update(bool generate) {
         spark.ttl -= timeDiff;
         spark.prevPos = spark.currPos;
         spark.currPos += spark.velocity;
-        spark.velocity += glm::vec3(0, -9.81, 0)*0.0001f;
+        spark.velocity += glm::vec3(0, -9.81, 0)*0.0005f;
     }
     prevTime = glfwGetTime();
     sparks.erase(std::remove_if(sparks.begin(), sparks.end(), [&](const auto &item) {

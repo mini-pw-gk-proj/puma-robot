@@ -29,6 +29,7 @@ struct PointLight {
     float quadraticAttenuation;
 };
 uniform PointLight pointLight;
+uniform vec3 ambient;
 
 const float PI = 3.14159265359;
 
@@ -99,9 +100,10 @@ void main() {
 
     float NdotL = max(dot(N, L), 0.0);
 
-    Lo += (kD * albedo.rgb / PI + specular) * radiance * NdotL * pointLight.strength;
+    float lightCount = 2.f;
+    Lo += (kD * albedo.rgb / PI + specular) * radiance * NdotL * pointLight.strength / lightCount;
 
-    vec3 ambient = vec3(0.1) * albedo.rgb;
+    vec3 ambient = ambient * albedo.rgb;
     vec3 color   = ambient + Lo;
     if(isMirror && alpha==0) {
         alpha = specular.r;

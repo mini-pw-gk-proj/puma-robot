@@ -12,5 +12,5 @@ uniform Material material;
 void main()
 {
     vec4 albedo = texture(material.texture, texCoords);
-    FragColor = vec4(1,0.8,0.8/*albedo.rgb*/, 2*albedo.a * alpha*alpha);
+    FragColor = vec4(1,0.8,0.8/*albedo.rgb*/, 1.5*albedo.a * alpha*alpha);
 }

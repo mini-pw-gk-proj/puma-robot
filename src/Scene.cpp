@@ -48,6 +48,10 @@ void Scene::render() {
     t.strength = 0.1; // Let a little bit of light in the shadows.
     setupPhong(t);
     drawScene();
+    t = appContext.pointLight2;
+    t.strength = 0.1; // Let a little bit of light in the shadows.
+    setupPhong(t);
+    drawScene();
     pbrShader.setUniform("ambient", glm::vec3(0.0));
 
     // Render shadowed scene

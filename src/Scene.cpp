@@ -30,6 +30,7 @@ void Scene::update() {
     appContext.light2->updatePosition(appContext.pointLight2.position);
 
     appContext.sparks->update(appContext.robot->kinematics.movementState == RobotKinematics::AnimatedInverseKinematics);
+
 }
 
 void Scene::render() {
@@ -53,7 +54,7 @@ void Scene::render() {
     createShadowMask(appContext.pointLight);
     setupShadowedPhong(appContext.pointLight);
     drawSceneNoMirror();
-
+;
     createShadowMask(appContext.pointLight2);
     setupShadowedPhong(appContext.pointLight2);
     drawSceneNoMirror();
@@ -149,7 +150,7 @@ void Scene::setupShadowedPhong(PointLight &pointLight) {
     glDepthFunc(GL_LEQUAL);
     glCullFace(GL_BACK);
     glPolygonOffset(0, 0);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glBlendFunc(GL_ONE, GL_ONE);
 
     pbrShader.use();
     pointLight.setupPointLight(pbrShader);

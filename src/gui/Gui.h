@@ -28,6 +28,8 @@ public:
     void showSceneWindow();
 
     void drawLightUI(PointLight &pointLight, int i);
+
+    void drawLightColorUI(PointLight &pointLight, int i);
 };
 
 

@@ -15,6 +15,7 @@ struct PointLight {
     float constantAttenuation = 1.0f;
     float linearAttenuation = 0.7f;
     float quadraticAttenuation = 1.8f;
+    int chosenLight = 1;
 
     void setupPointLight(Shader& shader) {
         shader.setUniform("pointLight.position", position);

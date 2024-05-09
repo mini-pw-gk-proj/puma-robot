@@ -5,6 +5,7 @@
 #include "Gui.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
+#include "../debug/DebugUI.h"
 #include <glm/gtc/type_ptr.hpp>
 
 Gui::Gui(AppContext &appContext, GLFWwindow *window) : appContext(appContext) {
@@ -56,6 +57,7 @@ void Gui::newFrame() {
 
 void Gui::render() {
     showSceneWindow();
+    DebugUI::render();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -121,16 +123,6 @@ void Gui::showSceneWindow() {
     drawLightUI(appContext.pointLight, 1);
     drawLightUI(appContext.pointLight2, 2);
 
-    const char* itemsL[] = { "40W Tungsten", "100W Tungsten", "Halogen" , "Carbon Arc"};
-    const std::map<int, glm::vec3> lights {
-            {0, glm::vec3(255/255.f, 197/255.f, 143/255.f)},
-            {1, glm::vec3(255/255.f, 214/255.f, 170/255.f)},
-            {2, glm::vec3(255/255.f, 241/255.f, 224/255.f)},
-            {3, glm::vec3(255/255.f, 250/255.f, 244/255.f)},
-    };
-    static int chosenLight = 1;
-    if(ImGui::Combo("Color##combo", &chosenLight, itemsL, IM_ARRAYSIZE(items)))
-        appContext.pointLight.color = lights.at(chosenLight);
 
     // Camera type
     ImGui::SeparatorText("Camera");
@@ -150,6 +142,21 @@ void Gui::showSceneWindow() {
     ImGui::End();
 }
 
+void Gui::drawLightColorUI(PointLight &pointLight, int i) {
+    const char* itemsL[] = {"40W Tungsten", "100W Tungsten", "Halogen" , "Carbon Arc", "Neon Red", "Neon Green", "Neon Blue"};
+    const std::map<int, glm::vec3> lights {
+            {0, glm::vec3(255/255.f, 197/255.f, 143/255.f)},
+            {1, glm::vec3(255/255.f, 214/255.f, 170/255.f)},
+            {2, glm::vec3(255/255.f, 241/255.f, 224/255.f)},
+            {3, glm::vec3(255/255.f, 250/255.f, 244/255.f)},
+            {4, glm::vec3(255/255.f, 0/255.f, 0/255.f)},
+            {5, glm::vec3(0/255.f, 255/255.f, 0/255.f)},
+            {6, glm::vec3(0/255.f, 0/255.f, 255/255.f)},
+    };
+    if(ImGui::Combo(("Color##combo"+std::to_string(i)).c_str(), &pointLight.chosenLight, itemsL, IM_ARRAYSIZE(itemsL)))
+        pointLight.color = lights.at(pointLight.chosenLight);
+}
+
 void Gui::drawLightUI(PointLight &pointLight, int i) {
     ImGui::SeparatorText(("Light " + std::to_string(i) +".").c_str());
     float *position = glm::value_ptr(pointLight.position);
@@ -163,6 +170,8 @@ void Gui::drawLightUI(PointLight &pointLight, int i) {
     if(position[2] < -3) position[2] = -3;
     if(position[2] > 3) position[2] = 3;
     pointLight.position = glm::vec3(position[0], position[1], position[2]);
+
+    drawLightColorUI(pointLight, i);
 }
 
 void Gui::showScene ()
